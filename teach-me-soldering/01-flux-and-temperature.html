@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1: What Flux Does and Why Temperature Matters</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --surface: #16213e;
+    --surface2: #0f3460;
+    --accent: #e94560;
+    --accent2: #ff6b6b;
+    --text: #eee;
+    --text-muted: #a0a0b0;
+    --success: #4ecdc4;
+    --warning: #f39c12;
+    --code-bg: #0d1117;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent2);
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--success);
+    border-bottom: 2px solid var(--surface2);
+    padding-bottom: 0.5rem;
+  }
+
+  h3 {
+    font-size: 1.15rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 1rem; }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+
+  .concept-box {
+    background: var(--surface);
+    border-left: 4px solid var(--accent);
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .concept-box strong {
+    color: var(--accent2);
+  }
+
+  .try-this {
+    background: linear-gradient(135deg, #0f3460 0%, #1a1a4e 100%);
+    border: 2px solid var(--success);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .try-this::before {
+    content: "Try This";
+    display: block;
+    font-weight: bold;
+    color: var(--success);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .warning-box {
+    background: rgba(243, 156, 18, 0.1);
+    border: 2px solid var(--warning);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .warning-box::before {
+    content: "Safety";
+    display: block;
+    font-weight: bold;
+    color: var(--warning);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .pinecil-setting {
+    background: var(--surface);
+    border: 2px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+    text-align: center;
+  }
+
+  .pinecil-setting .temp {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--accent2);
+  }
+
+  .pinecil-setting .label {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    margin-top: 0.3rem;
+  }
+
+  .step-grid {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 0.5rem 1rem;
+    margin: 1rem 0;
+  }
+
+  .step-num {
+    background: var(--accent);
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.1rem;
+  }
+
+  .step-content {
+    padding-top: 0.4rem;
+  }
+
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .comparison > div {
+    background: var(--surface);
+    padding: 1.2rem;
+    border-radius: 8px;
+  }
+
+  .comparison .bad { border-top: 3px solid var(--accent); }
+  .comparison .good { border-top: 3px solid var(--success); }
+  .comparison h4 { margin-bottom: 0.5rem; }
+  .comparison .bad h4 { color: var(--accent); }
+  .comparison .good h4 { color: var(--success); }
+
+  ol, ul {
+    margin: 0.5rem 0 1rem 1.5rem;
+  }
+
+  li { margin-bottom: 0.4rem; }
+
+  a {
+    color: var(--success);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--success);
+  }
+
+  a:hover { color: var(--accent2); border-bottom-color: var(--accent2); }
+
+  .cite {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .quiz-section {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .quiz-question {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: var(--accent2);
+  }
+
+  .quiz-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--surface2);
+    color: var(--text);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+  }
+
+  .quiz-option:hover { border-color: var(--accent); }
+  .quiz-option.correct { border-color: var(--success); background: rgba(78, 205, 196, 0.15); }
+  .quiz-option.wrong { border-color: var(--accent); background: rgba(233, 69, 96, 0.15); }
+
+  .quiz-feedback {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    display: none;
+  }
+
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct-fb { background: rgba(78, 205, 196, 0.15); border: 1px solid var(--success); }
+  .quiz-feedback.wrong-fb { background: rgba(233, 69, 96, 0.15); border: 1px solid var(--accent); }
+
+  .diagram {
+    font-family: monospace;
+    background: var(--code-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--text-muted);
+  }
+
+  .toc {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .toc h3 { margin-top: 0; color: var(--text-muted); }
+  .toc ol { margin-bottom: 0; }
+  .toc a { color: var(--text); border-bottom: none; }
+  .toc a:hover { color: var(--success); }
+
+  @media (max-width: 600px) {
+    body { padding: 1rem; }
+    .comparison { grid-template-columns: 1fr; }
+    h1 { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Lesson 1: What Flux Does and Why Temperature Matters</h1>
+<p class="subtitle">The two things that separate bad joints from good ones</p>
+
+<div class="toc">
+  <h3>Contents</h3>
+  <ol>
+    <li><a href="#why-flux">Why your joints come out bad (it's probably not your hands)</a></li>
+    <li><a href="#oxide">The invisible enemy: metal oxide</a></li>
+    <li><a href="#what-flux-does">What flux actually does (chemistry in 30 seconds)</a></li>
+    <li><a href="#your-flux">Your flux: NC-223-ASM</a></li>
+    <li><a href="#rosin-core">Wait -- doesn't solder wire already have flux?</a></li>
+    <li><a href="#when-extra">When to add extra flux paste</a></li>
+    <li><a href="#temperature">Temperature: the other half of the equation</a></li>
+    <li><a href="#pinecil-setup">Setting up your Pinecil V2</a></li>
+    <li><a href="#quiz">Check your understanding</a></li>
+  </ol>
+</div>
+
+<h2 id="why-flux">1. Why Your Joints Come Out Bad</h2>
+
+<p>Most bad solder joints have the same two root causes:</p>
+<ol>
+  <li><strong>Wrong temperature</strong> -- too cold and the solder won't wet; too hot and the flux burns off before it can work</li>
+  <li><strong>No flux on the joint</strong> -- or the flux in the solder wire was consumed before the joint was ready</li>
+</ol>
+<p>With an uncontrolled transformer iron, you had no way to fix problem #1. The Pinecil V2 solves that. This lesson tackles both.</p>
+
+<h2 id="oxide">2. The Invisible Enemy: Metal Oxide</h2>
+
+<p>Every metal surface exposed to air grows a thin layer of <strong>oxide</strong>. You can't see it, but it's there -- on your ESP32 header pins, on the PCB pads, on your solder wire, and on your iron tip.</p>
+
+<div class="concept-box">
+  <strong>Oxide is the reason solder doesn't stick.</strong> Molten solder bonds to clean metal through a process called <em>wetting</em>. Oxide blocks wetting. It's like trying to glue two surfaces with dust between them -- the glue touches the dust, not the surface.
+  <br><br>
+  <span class="cite">Source: <a href="https://www.chemtronics.com/essential-guide-to-flux-for-soldering-electronics">Chemtronics -- Essential Guide to Flux</a></span>
+</div>
+
+<p>This is why a joint can look like the solder just <em>sits on top</em> instead of flowing around the pin. The solder melted, but it couldn't wet the oxidized metal underneath.</p>
+
+<h2 id="what-flux-does">3. What Flux Actually Does</h2>
+
+<p>Flux is a chemical that does three things, in order, when heated:</p>
+
+<div class="step-grid">
+  <div><div class="step-num">1</div></div>
+  <div class="step-content"><strong>Dissolves oxide.</strong> The acids in flux (weak organic acids derived from pine rosin) chemically react with metal oxide and break it apart.</div>
+
+  <div><div class="step-num">2</div></div>
+  <div class="step-content"><strong>Shields from air.</strong> The melted flux coats the hot metal surface, preventing new oxide from forming during the seconds you're soldering.</div>
+
+  <div><div class="step-num">3</div></div>
+  <div class="step-content"><strong>Reduces surface tension.</strong> This lets the molten solder <em>flow</em> and <em>wet</em> the clean metal instead of balling up.</div>
+</div>
+
+<p>Without flux, the solder can't bond to the metal. With flux, it flows into every crevice and forms a solid metallurgical joint.</p>
+
+<div class="diagram">  Before flux:                    After flux:
+
+  Solder blob                     Solder fillet
+       ___                            .
+      /   \                          /|\
+     |     |     oxide layer        / | \
+  ===.=====.===  ~~~~~~~~~~~~    ==.==|==.==
+  ~~~~PCB pad~~  blocks flow     ~~PCB pad~~
+                                 clean metal, solder wets</div>
+
+<p class="cite">Source: <a href="https://www.chemtronics.com/essential-guide-to-flux-for-soldering-electronics">Chemtronics</a>, <a href="https://www.electronicshub.org/how-to-use-solder-flux/">ElectronicsHub</a></p>
+
+<h2 id="your-flux">4. Your Flux: NC-223-ASM</h2>
+
+<p>The NC-223-ASM is a <strong>no-clean flux paste</strong> in a syringe. Here's what that means for you:</p>
+
+<ul>
+  <li><strong>No-clean</strong> -- the residue left behind is non-conductive and non-corrosive. You can leave it on the board. (You can clean it with isopropyl alcohol if you want it to look neat, but you don't <em>have</em> to.)</li>
+  <li><strong>Paste format</strong> -- thick, sticky, stays where you put it. Apply with a toothpick or the syringe tip directly.</li>
+  <li><strong>BGA-grade</strong> -- it's designed for fine-pitch BGA rework, which means it's more than strong enough for through-hole ESP32 headers. You have good flux -- don't be afraid to use it.</li>
+</ul>
+
+<div class="warning-box">
+  <strong>Fumes:</strong> When flux heats up, it produces fumes (mostly rosin/colophony smoke). These can cause respiratory irritation over time. In your apartment:
+  <ul style="margin-top: 0.5rem;">
+    <li>Open a window near your workspace</li>
+    <li>Point a small desk fan to blow fumes away from your face (not at you)</li>
+    <li>Better: build a <a href="https://oscarliang.com/diy-solder-smoke-extractor/">$20 DIY fume extractor</a> with a PC fan + activated carbon filter</li>
+    <li>Don't solder in a closed room with no airflow</li>
+  </ul>
+</div>
+
+<h2 id="rosin-core">5. Wait -- Doesn't Solder Wire Already Have Flux?</h2>
+
+<p>Yes. Your tin solder wire almost certainly has a <strong>rosin core</strong> -- flux built into the center of the wire. When the wire melts, the flux releases automatically.</p>
+
+<p>For many simple through-hole joints (one pin, one pad, clean surfaces), the core flux is enough. You heat the pad and pin, touch the solder wire, and the core flux cleans the surface as the solder melts.</p>
+
+<div class="concept-box">
+  <strong>So why do you also need flux paste?</strong> Because the core flux is a small, fixed amount. It runs out fast. If the joint takes more than ~2 seconds, or the surfaces are oxidized, or you're doing multiple pins in sequence, the core flux burns off and you're back to soldering on oxide.
+  <br><br>
+  <span class="cite">Source: <a href="https://www.chemtronics.com/essential-guide-to-flux-for-soldering-electronics">Chemtronics</a></span>
+</div>
+
+<h2 id="when-extra">6. When to Add Extra Flux Paste</h2>
+
+<p>Use your NC-223-ASM flux paste in these situations:</p>
+
+<ol>
+  <li><strong>Multi-pin headers</strong> (like ESP32 headers) -- you're soldering 15+ pins in a row. By pin 5, the board is hot and flux is depleting. Pre-apply flux along the whole row.</li>
+  <li><strong>Fixing a bad joint</strong> -- reheating an old joint. The original flux is gone, the surface has re-oxidized. Fresh flux is essential.</li>
+  <li><strong>Solder bridges</strong> -- if two pins are bridged, add flux and drag the iron tip between them. The flux helps the solder flow to the pins instead of bridging.</li>
+  <li><strong>Oxidized parts</strong> -- old components, tarnished pads, or wire that's been sitting around.</li>
+  <li><strong>Tinning wire ends</strong> -- stranded wire or component leads benefit from flux before tinning.</li>
+</ol>
+
+<div class="try-this">
+  <strong>Look at your solder wire.</strong> Is there text printed on it? Look for two things:
+  <ul>
+    <li>The <strong>alloy</strong>: Sn60/Pb40 or Sn63/Pb37 means leaded. SAC305 or Sn99.3/Cu0.7 means lead-free.</li>
+    <li>The <strong>diameter</strong>: 0.8mm is ideal for ESP32 work. 1.0mm is fine. Thicker is harder to control.</li>
+  </ul>
+  Check this now -- the alloy determines what temperature to set.
+</div>
+
+<h2 id="temperature">7. Temperature: The Other Half</h2>
+
+<p>Flux and temperature work together. Here's why:</p>
+
+<div class="comparison">
+  <div class="bad">
+    <h4>Too cold</h4>
+    <ul>
+      <li>Solder melts slowly or not at all</li>
+      <li>You hold the iron longer, burning flux</li>
+      <li>Joint looks dull and lumpy (cold joint)</li>
+      <li>You press harder (bends pins, lifts pads)</li>
+    </ul>
+  </div>
+  <div class="bad">
+    <h4>Too hot</h4>
+    <ul>
+      <li>Flux burns off instantly (smoke puff)</li>
+      <li>Solder flows before flux can clean</li>
+      <li>Tip oxidizes fast, stops transferring heat</li>
+      <li>Risk of pad delamination on cheap PCBs</li>
+    </ul>
+  </div>
+</div>
+
+<div class="comparison">
+  <div class="good" style="grid-column: 1 / -1;">
+    <h4>Right temperature</h4>
+    <ul>
+      <li>Flux activates and cleans the surface (~1 second)</li>
+      <li>Solder melts and wets the joint smoothly (~1-2 seconds)</li>
+      <li>Total contact time: 2-3 seconds per joint</li>
+      <li>Joint looks shiny (leaded) or slightly satiny (lead-free), concave, smooth</li>
+    </ul>
+  </div>
+</div>
+
+<div class="concept-box">
+  <strong>The rule of thumb:</strong> Melting point of your solder + 120C = working temperature. Then adjust +/- 10C based on results. Start lower, go up 5C at a time.
+  <br><br>
+  <span class="cite">Source: <a href="https://wiki.pine64.org/wiki/Pinecil_Guides_to_Soldering">PINE64 Wiki</a></span>
+</div>
+
+<h2 id="pinecil-setup">8. Setting Up Your Pinecil V2</h2>
+
+<p>Here are the starting temperatures. Adjust from here based on your solder alloy.</p>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+  <div class="pinecil-setting">
+    <div class="temp">320 C</div>
+    <div class="label">Leaded solder (Sn63/Pb37)<br>Melts at ~183C</div>
+  </div>
+  <div class="pinecil-setting">
+    <div class="temp">350 C</div>
+    <div class="label">Lead-free solder (SAC305)<br>Melts at ~217C</div>
+  </div>
+</div>
+
+<h3>Before you solder: the setup checklist</h3>
+
+<ol>
+  <li><strong>Power supply:</strong> Use a USB-C PD charger rated 65W / 20V / 3A or higher. A phone charger won't deliver enough power. <span class="cite">(<a href="https://wiki.pine64.org/wiki/Pinecil">PINE64 Wiki</a>)</span></li>
+  <li><strong>Set temperature:</strong> Use the buttons on the Pinecil. Start at the values above.</li>
+  <li><strong>Tin your tip:</strong> When the iron is hot, melt a small blob of solder onto the tip. Wipe on a damp sponge or brass wool. The tip should look shiny silver, not grey or black.</li>
+  <li><strong>If the tip looks dark and solder won't stick to it:</strong> The tip is oxidized. Apply flux paste to the tip, then add solder. The flux will clean the oxide and the solder will tin the tip again.</li>
+</ol>
+
+<div class="try-this">
+  <strong>Test your setup now.</strong> Plug in your Pinecil, set it to 320C (or 350C for lead-free), and practice tinning the tip. Melt a tiny bit of solder on it, wipe on a sponge, repeat. The tip should be shiny after wiping. If it won't tin, add flux paste to the tip first, then solder.
+</div>
+
+<h2 id="quiz">Check Your Understanding</h2>
+
+<div class="quiz-section">
+  <div class="quiz-question">1. What does flux remove from metal surfaces?</div>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Dirt and dust</button>
+  <button class="quiz-option" onclick="checkAnswer(this, true)">Metal oxide</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Old solder</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Moisture</button>
+  <div class="quiz-feedback correct-fb" id="q1-correct">Correct. Flux dissolves the metal oxide layer that prevents solder from wetting the surface.</div>
+  <div class="quiz-feedback wrong-fb" id="q1-wrong">Not quite. Flux specifically targets <strong>metal oxide</strong> -- the invisible layer that forms when metal is exposed to air. This oxide is what prevents solder from bonding to the surface.</div>
+</div>
+
+<div class="quiz-section">
+  <div class="quiz-question">2. Your NC-223-ASM is a no-clean flux. What does that mean?</div>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">It doesn't leave any residue</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">It cleans itself off the board</button>
+  <button class="quiz-option" onclick="checkAnswer(this, true)">The residue is safe to leave on the board</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">You don't need to clean the iron after using it</button>
+  <div class="quiz-feedback correct-fb">Correct. No-clean flux does leave residue, but that residue is non-conductive and non-corrosive -- safe to leave in place.</div>
+  <div class="quiz-feedback wrong-fb">No-clean doesn't mean "no residue" -- it means the residue is <strong>safe to leave on the board</strong> because it's non-conductive and non-corrosive. You <em>can</em> clean it with isopropyl alcohol for aesthetics, but you don't have to.</div>
+</div>
+
+<div class="quiz-section">
+  <div class="quiz-question">3. You're soldering an ESP32 header (20 pins). When should you apply flux paste?</div>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Only if the solder won't melt</button>
+  <button class="quiz-option" onclick="checkAnswer(this, true)">Before you start -- along the whole row of pads</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">After all pins are soldered, to clean up</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Never -- the solder wire has flux inside</button>
+  <div class="quiz-feedback correct-fb">Correct. With 20 pins, the rosin core in your solder wire won't provide enough flux for the entire row. Pre-applying paste along the pads gives every joint fresh flux.</div>
+  <div class="quiz-feedback wrong-fb">With a long row of pins, the core flux in your solder wire depletes quickly. <strong>Pre-apply flux paste along the whole row</strong> before you start, so every joint gets fresh flux.</div>
+</div>
+
+<div class="quiz-section">
+  <div class="quiz-question">4. What happens if your iron temperature is too high?</div>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">The solder gets stronger</button>
+  <button class="quiz-option" onclick="checkAnswer(this, true)">The flux burns off before it can clean the surface</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Nothing bad -- hotter is always better</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">The solder wire explodes</button>
+  <div class="quiz-feedback correct-fb">Correct. Excessive heat destroys the flux before it can do its job. You'll see a quick puff of smoke and then poor wetting, because the surface is unprotected.</div>
+  <div class="quiz-feedback wrong-fb">Too much heat <strong>burns the flux off instantly</strong>. You'll see a puff of smoke as soon as the iron touches down, and the solder won't wet properly because the oxide layer wasn't cleaned.</div>
+</div>
+
+<div class="quiz-section">
+  <div class="quiz-question">5. Your Pinecil tip looks dark/grey and solder balls up on it instead of coating it. What do you do?</div>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Turn up the temperature to maximum</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">File the tip with sandpaper</button>
+  <button class="quiz-option" onclick="checkAnswer(this, true)">Apply flux paste to the tip, then add solder</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Replace the tip</button>
+  <div class="quiz-feedback correct-fb">Correct. The tip is oxidized. Flux paste will dissolve the oxide, and then solder can wet and tin the tip surface again. Never file or sand a tip -- it destroys the iron plating.</div>
+  <div class="quiz-feedback wrong-fb">The tip is oxidized -- the same problem flux solves on PCB pads. <strong>Apply flux paste to the tip, then melt solder onto it.</strong> The flux cleans the oxide and the solder re-tins the surface. Never sand a tip -- it destroys the protective plating.</div>
+</div>
+
+<script>
+function checkAnswer(btn, isCorrect) {
+  const section = btn.closest('.quiz-section');
+  const buttons = section.querySelectorAll('.quiz-option');
+  const feedbacks = section.querySelectorAll('.quiz-feedback');
+
+  // Prevent re-answering
+  if (section.dataset.answered) return;
+  section.dataset.answered = 'true';
+
+  buttons.forEach(b => b.style.cursor = 'default');
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    feedbacks.forEach(f => {
+      if (f.classList.contains('correct-fb')) {
+        f.classList.add('show');
+      }
+    });
+  } else {
+    btn.classList.add('wrong');
+    // Highlight the correct answer
+    buttons.forEach(b => {
+      if (b.getAttribute('onclick').includes('true')) {
+        b.classList.add('correct');
+      }
+    });
+    feedbacks.forEach(f => {
+      if (f.classList.contains('wrong-fb')) {
+        f.classList.add('show');
+      }
+    });
+  }
+}
+</script>
+
+</body>
+</html>

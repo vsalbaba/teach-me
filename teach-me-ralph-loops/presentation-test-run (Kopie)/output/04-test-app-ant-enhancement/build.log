@@ -1,0 +1,26 @@
+Buildfile: /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/04-test-app-ant-enhancement/build.xml
+
+clean:
+
+compile:
+    [mkdir] Created dir: /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/04-test-app-ant-enhancement/build/classes
+    [javac] Compiling 3 source files to /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/04-test-app-ant-enhancement/build/classes
+    [javac] warning: [options] system modules path not set in conjunction with -source 17
+    [javac] 1 warning
+
+enhance:
+     [java] Discovered types for: com.test.entity.Document
+     [java] Enhanced: com.test.entity.Document
+     [java] Enhancement complete.
+
+war:
+    [mkdir] Created dir: /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/04-test-app-ant-enhancement/build/war
+     [copy] Copying 2 files to /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/04-test-app-ant-enhancement/build/war/WEB-INF/classes
+     [copy] Copying 2 files to /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/04-test-app-ant-enhancement/build/war
+    [mkdir] Created dir: /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/04-test-app-ant-enhancement/build/war/WEB-INF/classes/META-INF
+     [move] Moving 1 file to /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/04-test-app-ant-enhancement/build/war/WEB-INF/classes/META-INF
+   [delete] Deleting directory /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/04-test-app-ant-enhancement/build/war/META-INF
+      [jar] Building jar: /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/04-test-app-ant-enhancement/build/ant-enhancement-test.war
+
+BUILD SUCCESSFUL
+Total time: 0 seconds

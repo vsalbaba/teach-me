@@ -1,0 +1,41 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ------------------< com.test:enhancement-happy-path >-------------------
+[INFO] Building enhancement-happy-path 1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ war ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ enhancement-happy-path ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ enhancement-happy-path ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ enhancement-happy-path ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 2 source files with javac [debug target 17] to target/classes
+[WARNING] system modules path not set in conjunction with -source 17
+[INFO] 
+[INFO] --- hibernate-enhance:6.6.51.Final-redhat-00001:enhance (enhance) @ enhancement-happy-path ---
+[INFO] Starting Hibernate enhancement for classes on /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/01-test-app-happy-path/target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ enhancement-happy-path ---
+[INFO] skip non existing resourceDirectory /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/01-test-app-happy-path/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ enhancement-happy-path ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ enhancement-happy-path ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- war:3.4.0:war (default-war) @ enhancement-happy-path ---
+[INFO] Packaging webapp
+[INFO] Assembling webapp [enhancement-happy-path] in [/home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/01-test-app-happy-path/target/enhancement-test]
+[INFO] Processing war project
+[INFO] Copying webapp resources [/home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/01-test-app-happy-path/src/main/webapp]
+[INFO] Building war: /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/01-test-app-happy-path/target/enhancement-test.war
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.277 s
+[INFO] Finished at: 2026-06-19T11:14:19+02:00
+[INFO] ------------------------------------------------------------------------

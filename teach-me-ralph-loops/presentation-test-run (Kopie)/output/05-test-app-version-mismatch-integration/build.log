@@ -1,0 +1,41 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] -------------< com.test:version-mismatch-integration-test >-------------
+[INFO] Building version-mismatch-integration-test 1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ war ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ version-mismatch-integration-test ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ version-mismatch-integration-test ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ version-mismatch-integration-test ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 2 source files with javac [debug target 17] to target/classes
+[WARNING] system modules path not set in conjunction with -source 17
+[INFO] 
+[INFO] --- hibernate-enhance:6.6.48.Final-redhat-00001:enhance (enhance) @ version-mismatch-integration-test ---
+[INFO] Starting Hibernate enhancement for classes on /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/05-test-app-version-mismatch-integration/target/classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ version-mismatch-integration-test ---
+[INFO] skip non existing resourceDirectory /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/05-test-app-version-mismatch-integration/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ version-mismatch-integration-test ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ version-mismatch-integration-test ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- war:3.4.0:war (default-war) @ version-mismatch-integration-test ---
+[INFO] Packaging webapp
+[INFO] Assembling webapp [version-mismatch-integration-test] in [/home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/05-test-app-version-mismatch-integration/target/version-mismatch-integration-test]
+[INFO] Processing war project
+[INFO] Copying webapp resources [/home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/05-test-app-version-mismatch-integration/src/main/webapp]
+[INFO] Building war: /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/05-test-app-version-mismatch-integration/target/version-mismatch-integration-test.war
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  1.225 s
+[INFO] Finished at: 2026-06-19T12:12:32+02:00
+[INFO] ------------------------------------------------------------------------

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Git Worktrees for Multi-Agent Workflows</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --border: #30363d;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --accent: #58a6ff;
+    --accent-dim: #1f3a5f;
+    --green: #3fb950;
+    --green-dim: #1a3a2a;
+    --orange: #d29922;
+    --orange-dim: #3d2e00;
+    --red: #f85149;
+    --purple: #bc8cff;
+    --code-bg: #0d1117;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+  h1 { font-size: 2rem; margin-bottom: 0.5rem; color: var(--accent); }
+  h2 { font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; color: var(--text); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem; }
+  h3 { font-size: 1.15rem; margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--purple); }
+  p { margin-bottom: 1rem; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  code {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    background: var(--surface);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+    border: 1px solid var(--border);
+  }
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+  }
+  pre code { background: none; border: none; padding: 0; font-size: 0.85em; }
+  .subtitle { color: var(--text-muted); font-size: 1.1rem; margin-bottom: 2rem; }
+  .concept-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin: 1.25rem 0;
+  }
+  .try-this {
+    background: var(--green-dim);
+    border: 1px solid var(--green);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin: 1.25rem 0;
+  }
+  .try-this::before {
+    content: "Try this";
+    display: block;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .warning {
+    background: var(--orange-dim);
+    border: 1px solid var(--orange);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin: 1.25rem 0;
+  }
+  .warning::before {
+    content: "Watch out";
+    display: block;
+    font-weight: 700;
+    color: var(--orange);
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .key-insight {
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin: 1.25rem 0;
+  }
+  .key-insight::before {
+    content: "Key insight";
+    display: block;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .diagram {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.25rem 0;
+    white-space: pre;
+    font-size: 0.8em;
+    line-height: 1.5;
+    overflow-x: auto;
+  }
+  .cite {
+    font-size: 0.8em;
+    color: var(--text-muted);
+    vertical-align: super;
+  }
+  ul, ol { margin-bottom: 1rem; padding-left: 1.5rem; }
+  li { margin-bottom: 0.4rem; }
+  .toc { margin: 1.5rem 0; }
+  .toc a { display: block; padding: 0.25rem 0; color: var(--text-muted); }
+  .toc a:hover { color: var(--accent); }
+  hr { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+  .quiz-container {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .quiz-container h3 { margin-top: 0; color: var(--accent); }
+  .quiz-option {
+    display: block;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    margin: 0.5rem 0;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    color: var(--text);
+    width: 100%;
+    text-align: left;
+    font-size: 0.95rem;
+  }
+  .quiz-option:hover { border-color: var(--accent); }
+  .quiz-option.correct { border-color: var(--green); background: var(--green-dim); }
+  .quiz-option.wrong { border-color: var(--red); opacity: 0.6; }
+  .quiz-feedback { margin-top: 0.75rem; padding: 0.75rem; border-radius: 6px; display: none; }
+  .quiz-feedback.show { display: block; }
+  footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.85rem; }
+</style>
+</head>
+<body>
+
+<h1>Git Worktrees for Multi-Agent Workflows</h1>
+<p class="subtitle">How worktrees enable a dev agent and a review agent to work on the same repo simultaneously</p>
+
+<nav class="toc">
+  <a href="#part1">1. The Problem: One Repo, Multiple Agents</a>
+  <a href="#part2">2. What a Worktree Actually Is</a>
+  <a href="#part3">3. Worktrees in Claude Code</a>
+  <a href="#part4">4. The Dev + Review Agent Pattern</a>
+  <a href="#part5">5. Constraints and Gotchas</a>
+  <a href="#part6">6. Check Your Understanding</a>
+</nav>
+
+<hr>
+
+<h2 id="part1">1. The Problem: One Repo, Multiple Agents</h2>
+
+<p>You want two Claude Code agents running at the same time on the same repository -- one writing code, one reviewing and refactoring. Without isolation, they'd trample each other's files. Every edit by one agent would corrupt the working directory for the other.</p>
+
+<p>You could clone the repo twice, but that duplicates the entire <code>.git</code> history on disk and the two copies don't share refs -- fetching in one doesn't update the other.<a class="cite" href="https://git-scm.com/docs/git-worktree">[1]</a></p>
+
+<div class="key-insight">
+Git worktrees solve this by giving you multiple working directories that share a single <code>.git</code> directory. Same history, same remotes, same refs -- different checkouts.
+</div>
+
+<h2 id="part2">2. What a Worktree Actually Is</h2>
+
+<p>Every git repo has a <strong>main worktree</strong> -- the directory you cloned into. With <code>git worktree add</code>, you create <strong>linked worktrees</strong>: additional working directories, each checked out to a different branch, all pointing back to the same <code>.git</code> data.<a class="cite" href="https://git-scm.com/docs/git-worktree">[1]</a></p>
+
+<div class="diagram">
+my-project/                  <-- main worktree (branch: main)
+  .git/                      <-- shared repository data
+  src/
+  ...
+
+.claude/worktrees/
+  feature-auth/              <-- linked worktree (branch: worktree-feature-auth)
+    src/
+    ...
+  review-refactor/           <-- linked worktree (branch: worktree-review-refactor)
+    src/
+    ...
+</div>
+
+<h3>What's shared, what's not</h3>
+
+<div class="concept-box">
+  <p><strong>Shared</strong> (one copy): commit history, remote tracking, refs, tags, config</p>
+  <p><strong>Separate per worktree</strong>: working files, index (staging area), HEAD, checked-out branch</p>
+</div>
+
+<p>This means a commit made in one worktree is immediately visible from any other worktree (it's in the shared object store). But the files on disk in each worktree are independent -- editing <code>src/auth.ts</code> in one worktree doesn't touch it in another.<a class="cite" href="https://git-scm.com/docs/git-worktree">[1]</a></p>
+
+<h3>The one-branch rule</h3>
+
+<p>A branch can only be checked out in <strong>one worktree at a time</strong>. If <code>main</code> is checked out in your main worktree, a linked worktree must use a different branch. This prevents two worktrees from racing to update the same branch ref.<a class="cite" href="https://git-scm.com/docs/git-worktree">[1]</a></p>
+
+<div class="try-this">
+<p>In any git repo, run these commands to see worktrees in action:</p>
+<pre><code># Create a linked worktree on a new branch
+git worktree add ../my-repo-experiment -b experiment
+
+# See both worktrees listed
+git worktree list
+
+# The new worktree has the full repo, on its own branch
+cd ../my-repo-experiment && git branch
+
+# Clean up when done
+cd - && git worktree remove ../my-repo-experiment</code></pre>
+</div>
+
+<h2 id="part3">3. Worktrees in Claude Code</h2>
+
+<p>Claude Code has built-in worktree support via two mechanisms:<a class="cite" href="https://code.claude.com/docs/en/worktrees">[2]</a></p>
+
+<h3>The <code>--worktree</code> CLI flag</h3>
+
+<p>Start a Claude Code session in an isolated worktree:</p>
+
+<pre><code># Terminal 1: dev agent
+claude --worktree dev-feature
+
+# Terminal 2: review agent
+claude --worktree review-feature</code></pre>
+
+<p>This creates <code>.claude/worktrees/dev-feature/</code> on branch <code>worktree-dev-feature</code>, and similarly for the review worktree. Each session is fully isolated.<a class="cite" href="https://code.claude.com/docs/en/worktrees">[2]</a></p>
+
+<h3>The <code>EnterWorktree</code> tool (mid-session)</h3>
+
+<p>You can also ask Claude to "work in a worktree" during a running session. Claude calls the <code>EnterWorktree</code> tool internally, creating a worktree and switching the session into it.<a class="cite" href="https://code.claude.com/docs/en/worktrees">[2]</a></p>
+
+<h3>Subagent isolation</h3>
+
+<p>When dispatching subagents (via the Agent tool), you can set <code>isolation: "worktree"</code> so each subagent gets its own worktree automatically. This is the key building block for multi-agent workflows:<a class="cite" href="https://code.claude.com/docs/en/worktrees">[2]</a></p>
+
+<pre><code>// In a workflow script or when spawning agents:
+agent("Implement the auth module", { isolation: "worktree" })
+agent("Review and refactor the auth module", { isolation: "worktree" })</code></pre>
+
+<h3>Base branch control</h3>
+
+<p>By default, worktrees branch from <code>origin/HEAD</code> (clean remote state). Set <code>worktree.baseRef</code> to <code>"head"</code> in settings to branch from your current local HEAD instead -- useful when a review agent needs to see in-progress work:<a class="cite" href="https://code.claude.com/docs/en/worktrees">[2]</a></p>
+
+<pre><code>// .claude/settings.json
+{
+  "worktree": {
+    "baseRef": "head"
+  }
+}</code></pre>
+
+<h3>Cleanup</h3>
+
+<ul>
+  <li><strong>No changes made</strong>: worktree and branch are removed automatically on exit</li>
+  <li><strong>Changes exist</strong>: Claude prompts you to keep or remove</li>
+  <li><strong>Subagent worktrees</strong>: auto-removed if unchanged, otherwise kept until <code>cleanupPeriodDays</code> expires<a class="cite" href="https://code.claude.com/docs/en/worktrees">[2]</a></li>
+</ul>
+
+<div class="try-this">
+<p>Try starting two Claude Code sessions in worktrees right now:</p>
+<pre><code># In your project directory:
+
+# Terminal 1
+claude --worktree dev-session
+
+# Terminal 2
+claude --worktree review-session
+
+# Back in the main checkout, see them both:
+git worktree list</code></pre>
+</div>
+
+<h2 id="part4">4. The Dev + Review Agent Pattern</h2>
+
+<p>Here's how your workflow maps onto worktrees:</p>
+
+<div class="diagram">
+                    ┌─────────────────────┐
+                    │   Your main repo    │
+                    │   (branch: main)    │
+                    └──────────┬──────────┘
+                               │
+              ┌────────────────┼────────────────┐
+              │                                 │
+   ┌──────────▼──────────┐          ┌───────────▼──────────┐
+   │   Dev Agent          │          │   Review Agent        │
+   │   worktree: dev      │          │   worktree: review    │
+   │   branch: worktree-  │          │   branch: worktree-   │
+   │          dev         │          │          review       │
+   │                      │          │                       │
+   │   Writes new code    │  commit  │   Reads dev's commits │
+   │   Runs tests         │ ──────▶  │   Reviews & refactors │
+   │   Commits            │          │   Commits fixes       │
+   └──────────────────────┘          └───────────────────────┘
+              │                                 │
+              └────────────────┬────────────────┘
+                               │
+                          merge both
+                          into main
+</div>
+
+<h3>Step by step</h3>
+
+<ol>
+  <li><strong>Dev agent</strong> starts in its worktree, writes code, commits to its branch</li>
+  <li><strong>Review agent</strong> starts in a separate worktree. To see the dev agent's work, it either:
+    <ul>
+      <li>Checks out the dev agent's branch (after the dev agent is done with it), or</li>
+      <li>Cherry-picks / merges the dev agent's commits into its own branch</li>
+    </ul>
+  </li>
+  <li><strong>Review agent</strong> refactors, commits improvements to its own branch</li>
+  <li><strong>You</strong> merge both branches into main (or the review agent's branch supersedes the dev's)</li>
+</ol>
+
+<div class="key-insight">
+The critical sequencing decision: can the review agent start <em>before</em> the dev agent commits? Yes -- but it can only review commits, not uncommitted working-tree changes in the other worktree. If you want true parallel work, the dev agent should commit frequently so the review agent can pull those commits.
+</div>
+
+<h3>The simpler sequential pattern</h3>
+
+<p>For many cases, a sequential pattern is cleaner:</p>
+
+<ol>
+  <li>Dev agent works in worktree A, commits, pushes branch</li>
+  <li>Review agent starts in worktree B, checks out the dev's branch, reviews and refactors</li>
+  <li>Review agent commits its changes on top, opens a PR</li>
+</ol>
+
+<p>This avoids merge complexity. The review agent builds directly on the dev agent's work.</p>
+
+<h2 id="part5">5. Constraints and Gotchas</h2>
+
+<div class="warning">
+<ul>
+  <li><strong>One branch per worktree</strong>: Two worktrees can't have the same branch checked out simultaneously. Plan your branch names.</li>
+  <li><strong>Port conflicts</strong>: If both agents try to run dev servers, they'll fight over the same port. Use different ports per worktree.</li>
+  <li><strong>Database state</strong>: Both worktrees share any local database. If one agent runs a migration, the other's schema is now different.</li>
+  <li><strong>.env files aren't copied</strong>: Use <code>.worktreeinclude</code> to auto-copy gitignored files into new worktrees.<a class="cite" href="https://code.claude.com/docs/en/worktrees">[2]</a></li>
+  <li><strong>Lock files</strong>: <code>git worktree lock</code> prevents cleanup while an agent is running. Don't manually delete worktree directories -- use <code>git worktree remove</code>.</li>
+  <li><strong>Subagent cost</strong>: Worktree isolation adds ~200-500ms setup per agent. Don't use it when agents aren't editing files.</li>
+</ul>
+</div>
+
+<h2 id="part6">6. Check Your Understanding</h2>
+
+<div class="quiz-container">
+  <h3>Q1: What does a linked worktree share with the main worktree?</h3>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Working files and staging area</button>
+  <button class="quiz-option" onclick="checkAnswer(this, true)">Commit history, refs, remotes, and config</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Everything -- it's just a symlink</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Nothing -- it's a full clone</button>
+  <div class="quiz-feedback" id="q1-feedback"></div>
+</div>
+
+<div class="quiz-container">
+  <h3>Q2: Can two worktrees have the same branch checked out?</h3>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Yes, that's the point of worktrees</button>
+  <button class="quiz-option" onclick="checkAnswer(this, true)">No -- each branch can only be checked out in one worktree at a time</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Only if you use --force</button>
+  <div class="quiz-feedback" id="q2-feedback"></div>
+</div>
+
+<div class="quiz-container">
+  <h3>Q3: How can a review agent see uncommitted changes from a dev agent's worktree?</h3>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">By running git pull in its own worktree</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">By reading the shared staging area</button>
+  <button class="quiz-option" onclick="checkAnswer(this, true)">It can't -- only committed changes are visible through the shared object store</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">By mounting the other worktree as a submodule</button>
+  <div class="quiz-feedback" id="q3-feedback"></div>
+</div>
+
+<div class="quiz-container">
+  <h3>Q4: What does <code>worktree.baseRef: "head"</code> do in Claude Code settings?</h3>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Makes worktrees branch from origin/HEAD</button>
+  <button class="quiz-option" onclick="checkAnswer(this, true)">Makes worktrees branch from your current local HEAD, carrying unpushed commits</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Detaches the HEAD in each worktree</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Disables automatic branch creation</button>
+  <div class="quiz-feedback" id="q4-feedback"></div>
+</div>
+
+<hr>
+
+<footer>
+  <p><strong>Sources</strong></p>
+  <ol>
+    <li><a href="https://git-scm.com/docs/git-worktree">git-worktree Documentation (git-scm.com)</a></li>
+    <li><a href="https://code.claude.com/docs/en/worktrees">Claude Code: Run parallel sessions with worktrees</a></li>
+    <li><a href="https://barrd.dev/article/parallel-development-without-the-headaches-using-git-worktree/">Parallel Development without the Headaches (barrd.dev)</a></li>
+  </ol>
+</footer>
+
+<script>
+function checkAnswer(btn, correct) {
+  const container = btn.closest('.quiz-container');
+  const buttons = container.querySelectorAll('.quiz-option');
+  const answered = container.querySelector('.quiz-option.correct, .quiz-option.wrong');
+  if (answered) return;
+
+  buttons.forEach(b => b.style.pointerEvents = 'none');
+
+  if (correct) {
+    btn.classList.add('correct');
+  } else {
+    btn.classList.add('wrong');
+    buttons.forEach(b => {
+      if (b !== btn) {
+        const idx = Array.from(buttons).indexOf(b);
+        const isCorrect = b.getAttribute('onclick').includes('true');
+        if (isCorrect) b.classList.add('correct');
+      }
+    });
+  }
+}
+</script>
+
+</body>
+</html>

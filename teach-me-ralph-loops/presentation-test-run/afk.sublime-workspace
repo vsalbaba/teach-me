@@ -1,0 +1,199 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"TEMP",
+				"TEMP_TEX_FILE"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/home/vsalbaba/.ssh/id_rsa.pub",
+		"/home/vsalbaba/.claude/plans/dynamic-watching-island.md",
+		"/home/vsalbaba/Workspace/dioptrici/web/index.html",
+		"/home/vsalbaba/Workspace/jbeap-27944/jbeap27944/modules/io/undertow/core/main/module.xml",
+		"/home/vsalbaba/Downloads/kamelot---kdyz-zamrza-reka}.zpk.xml",
+		"/home/vsalbaba/Workspace/dioptrici/web/img/IMG_5350_12x7.jpg",
+		"/home/vsalbaba/Downloads/jbeap-27944/patch.xml",
+		"/home/vsalbaba/Workspace/qe/migrate_to_cee.sh",
+		"/home/vsalbaba/Workspace/qe/eapqe-1703/application-provisioning-zip/pom.xml",
+		"/home/vsalbaba/untitled.html",
+		"/home/vsalbaba/Workspace/qe/eap/jboss-eap-8.0.2.GA-xp-5.0.0.GA-CR2-demo03-provisioned/jboss-eap-xp-5.0/modules/system/layers/base/org/jboss/prospero/main/module.xml",
+		"/home/vsalbaba/Downloads/config_entry-tuya-1f79d3bd7c63b014e9d74630afb8e1e4.json",
+		"/home/vsalbaba/Workspace/vzs/ucastnici.txt",
+		"/home/vsalbaba/Workspace/vzs/ucastnik.txt",
+		"/home/vsalbaba/Workspace/vzs/generate_diplomas.sh",
+		"/home/vsalbaba/Workspace/vzs/output/batch_0.tex",
+		"/home/vsalbaba/Workspace/vzs/ucastnici.skolka.txt",
+		"/home/vsalbaba/Workspace/qe/eapqe-1703/application-provisioning-zip/zip-app-mvn-settings.xml",
+		"/home/vsalbaba/Downloads/jboss-eap-xp-5.0.0.GA-CR2-mrrc-only-maven-repository/jboss-eap-xp-5.0.0.GA-mrrc-only-maven-repository/maven-repository/org/wildfly/security/wildfly-elytron-parent/2.2.4.SP01-redhat-00001/wildfly-elytron-parent-2.2.4.SP01-redhat-00001.pom",
+		"/home/vsalbaba/Downloads/jboss-eap-xp-5.0.0.GA-CR2-mrrc-only-maven-repository/jboss-eap-xp-5.0.0.GA-mrrc-only-maven-repository/maven-repository/org/apache/httpcomponents/httpclient/4.5.14.redhat-00010/httpclient-4.5.14.redhat-00010.pom",
+		"/home/vsalbaba/Workspace/qe/eap/jboss-eap-xp-5.0.0.GA-maven-repository/maven-repository/io/smallrye/reactive/smallrye-reactive-utilities-projects/2.6.0.redhat-00001/smallrye-reactive-utilities-projects-2.6.0.redhat-00001.pom",
+		"/home/vsalbaba/Workspace/qe/eap/jboss-eap-xp-5.0.0.GA-maven-repository/maven-repository/com/google/protobuf/protobuf-parent/3.19.6.redhat-00003/protobuf-parent-3.19.6.redhat-00003.pom",
+		"/home/vsalbaba/Workspace/eap7-2122/jboss-eap-8.0.0.GA-CR3-maven-repository/jboss-eap-8.0.0.GA-maven-repository/maven-repository/org/jboss/eap/channels/eap-8.0/1.0.1.GA-redhat-00003/eap-8.0-1.0.1.GA-redhat-00003-manifest.yaml",
+		"/home/vsalbaba/Workspace/eap7-2122/helloworld-bootable-jar/pom.xml",
+		"/home/vsalbaba/Workspace/eap7-2122/custom-settings.xml",
+		"/home/vsalbaba/Workspace/eap7-2122/jboss-eap-xp-5.0.0.GA-redhat-20240201-bootable-jar-maven-repository/jboss-eap-xp-5.0.0.GA-bootable-jar-maven-repository/maven-repository/org/wildfly/plugins/wildfly-jar-maven-plugin/maven-metadata.xml",
+		"/home/vsalbaba/Workspace/eap7-2122/helloworld/pom.xml"
+	],
+	"find":
+	{
+		"height": 23.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"sshd",
+			"push",
+			"\n    version: \"1.12.284.redhat-00002\"",
+			"eap"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "afk.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

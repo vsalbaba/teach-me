@@ -1,0 +1,38 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------------< com.test:runtime-baseline >----------------------
+[INFO] Building runtime-baseline 1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ war ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ runtime-baseline ---
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ runtime-baseline ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ runtime-baseline ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 2 source files with javac [debug target 17] to target/classes
+[WARNING] system modules path not set in conjunction with -source 17
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ runtime-baseline ---
+[INFO] skip non existing resourceDirectory /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/02-test-app-runtime-baseline/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ runtime-baseline ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.2.5:test (default-test) @ runtime-baseline ---
+[INFO] No tests to run.
+[INFO] 
+[INFO] --- war:3.4.0:war (default-war) @ runtime-baseline ---
+[INFO] Packaging webapp
+[INFO] Assembling webapp [runtime-baseline] in [/home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/02-test-app-runtime-baseline/target/runtime-baseline-test]
+[INFO] Processing war project
+[INFO] Copying webapp resources [/home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/02-test-app-runtime-baseline/src/main/webapp]
+[INFO] Building war: /home/vsalbaba/Workspace/experiment/teach-me-ralph-loops/presentation-test-run (Kopie)/output/02-test-app-runtime-baseline/target/runtime-baseline-test.war
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.923 s
+[INFO] Finished at: 2026-06-19T11:35:29+02:00
+[INFO] ------------------------------------------------------------------------

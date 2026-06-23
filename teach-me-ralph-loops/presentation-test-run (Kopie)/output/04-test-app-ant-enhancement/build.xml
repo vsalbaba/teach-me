@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ant-enhancement-test" default="war" basedir=".">
+
+    <property name="src.dir"     value="src"/>
+    <property name="classes.dir" value="build/classes"/>
+    <property name="war.dir"     value="build/war"/>
+    <property name="war.file"    value="build/ant-enhancement-test.war"/>
+
+    <!-- Classpath for compilation (provided-scope APIs) -->
+    <path id="compile.classpath">
+        <fileset dir="${lib.dir}">
+            <include name="**/*.jar"/>
+        </fileset>
+    </path>
+
+    <!-- Classpath for the enhance runner (needs Hibernate + ByteBuddy) -->
+    <path id="enhance.classpath">
+        <path refid="compile.classpath"/>
+        <pathelement location="${classes.dir}"/>
+    </path>
+
+    <target name="clean">
+        <delete dir="build"/>
+    </target>
+
+    <target name="compile" depends="clean">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}"
+               classpathref="compile.classpath"
+               source="17" target="17"
+               includeantruntime="false"/>
+    </target>
+
+    <target name="enhance" depends="compile"
+            description="Enhance entity bytecode using Hibernate Enhancer SPI">
+        <java classname="com.test.tool.EnhanceRunner"
+              fork="true" failonerror="true"
+              classpathref="enhance.classpath">
+            <arg value="${classes.dir}"/>
+        </java>
+    </target>
+
+    <target name="war" depends="enhance">
+        <mkdir dir="${war.dir}"/>
+        <!-- Copy classes (exclude the tool package, not needed at runtime) -->
+        <copy todir="${war.dir}/WEB-INF/classes">
+            <fileset dir="${classes.dir}">
+                <exclude name="com/test/tool/**"/>
+            </fileset>
+        </copy>
+        <!-- Copy web resources -->
+        <copy todir="${war.dir}">
+            <fileset dir="webapp"/>
+        </copy>
+        <!-- Move persistence.xml into WEB-INF/classes/META-INF -->
+        <mkdir dir="${war.dir}/WEB-INF/classes/META-INF"/>
+        <move file="${war.dir}/META-INF/persistence.xml"
+              todir="${war.dir}/WEB-INF/classes/META-INF"/>
+        <delete dir="${war.dir}/META-INF"/>
+        <!-- Package WAR -->
+        <jar destfile="${war.file}" basedir="${war.dir}"/>
+    </target>
+
+</project>

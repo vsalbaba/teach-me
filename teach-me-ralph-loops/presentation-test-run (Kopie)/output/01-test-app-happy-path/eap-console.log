@@ -1,0 +1,112 @@
+=========================================================================
+
+  JBoss Bootstrap Environment
+
+  JBOSS_HOME: /tmp/eap-test-01-home
+
+  JAVA: /home/vsalbaba/.sdkman/candidates/java/current/bin/java
+
+  JAVA_OPTS:  -Xlog:gc*:file="/tmp/eap-test-01-base/log/gc.log":time,uptimemillis:filecount=5,filesize=3M -Djdk.serialFilter="maxbytes=10485760;maxdepth=128;maxarray=100000;maxrefs=300000" -Xms1303m -Xmx1303m -Djava.net.preferIPv4Stack=true -Djboss.modules.system.pkgs=org.jboss.byteman -Djava.awt.headless=true  --add-exports=java.desktop/sun.awt=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.ldap=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.url.ldap=ALL-UNNAMED --add-exports=java.naming/com.sun.jndi.url.ldaps=ALL-UNNAMED --add-exports=jdk.naming.dns/com.sun.jndi.dns=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.lang.invoke=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.management/javax.management=ALL-UNNAMED --add-opens=java.naming/javax.naming=ALL-UNNAMED
+
+=========================================================================
+
+[0m11:14:19,994 INFO  [org.jboss.modules] (main) JBoss Modules version 2.1.6.Final-redhat-00001
+[0m[0m11:14:20,281 INFO  [org.jboss.msc] (main) JBoss MSC version 1.5.6.Final-redhat-00001
+[0m[0m11:14:20,352 INFO  [org.jboss.as] (MSC service thread 1-2) WFLYSRV0049: JBoss EAP 8.2 Beta (WildFly Core 33.0.0.Beta2-redhat-00001) starting
+[0m[0m11:14:20,866 INFO  [org.wildfly.security] (Controller Boot Thread) ELY00001: WildFly Elytron version 2.9.1.Final-redhat-00001
+[0m[0m11:14:21,131 INFO  [org.jboss.as.server] (Controller Boot Thread) WFLYSRV0039: Creating http management service using socket-binding (management-http)
+[0m[0m11:14:21,145 INFO  [org.xnio] (MSC service thread 1-6) XNIO version 3.8.16.Final-redhat-00001
+[0m[0m11:14:21,153 INFO  [org.xnio.nio] (MSC service thread 1-6) XNIO NIO Implementation Version 3.8.16.Final-redhat-00001
+[0m[0m11:14:21,189 INFO  [org.wildfly.extension.elytron.oidc._private] (ServerService Thread Pool -- 52) WFLYOIDC0001: Activating WildFly Elytron OIDC Subsystem
+[0m[0m11:14:21,193 INFO  [org.jboss.as.jaxrs] (ServerService Thread Pool -- 56) WFLYRS0016: RESTEasy version 6.2.16.Final-redhat-00002
+[0m[0m11:14:21,193 INFO  [org.wildfly.extension.health] (ServerService Thread Pool -- 53) WFLYHEALTH0001: Activating Base Health Subsystem
+[0m[0m11:14:21,195 INFO  [org.wildfly.extension.io] (ServerService Thread Pool -- 55) WFLYIO001: Worker 'default' has auto-configured to 32 IO threads with 256 max task threads based on your 16 available processors
+[0m[33m11:14:21,200 WARN  [org.jboss.as.txn] (ServerService Thread Pool -- 71) WFLYTX0013: The node-identifier attribute on the /subsystem=transactions is set to the default value. This is a danger for environments running multiple servers. Please make sure the attribute value is unique.
+[0m[0m11:14:21,204 INFO  [org.jboss.as.jsf] (ServerService Thread Pool -- 61) WFLYJSF0007: Activated the following Jakarta Server Faces Implementations: [main]
+[0m[0m11:14:21,207 INFO  [org.jboss.as.webservices] (ServerService Thread Pool -- 73) WFLYWS0002: Activating WebServices Extension
+[0m[0m11:14:21,207 INFO  [org.jboss.as.clustering.infinispan] (ServerService Thread Pool -- 54) WFLYCLINF0001: Activating Infinispan subsystem.
+[0m[0m11:14:21,210 INFO  [org.jboss.remoting] (MSC service thread 1-8) JBoss Remoting version 5.0.31.Final-redhat-00001
+[0m[0m11:14:21,213 INFO  [org.jboss.as.naming] (ServerService Thread Pool -- 64) WFLYNAM0001: Activating Naming Subsystem
+[0m[0m11:14:21,216 INFO  [org.jboss.as.connector] (MSC service thread 1-2) WFLYJCA0009: Starting Jakarta Connectors Subsystem (WildFly/IronJacamar 3.0.19.Final-redhat-00001)
+[0m[0m11:14:21,218 INFO  [org.wildfly.extension.metrics] (ServerService Thread Pool -- 63) WFLYMETRICS0001: Activating Base Metrics Subsystem
+[0m[0m11:14:21,227 INFO  [org.jboss.as.connector.subsystems.datasources] (ServerService Thread Pool -- 43) WFLYJCA0004: Deploying JDBC-compliant driver class org.h2.Driver (version 2.2)
+[0m[0m11:14:21,236 INFO  [org.jboss.as.connector.deployers.jdbc] (MSC service thread 1-9) WFLYJCA0018: Started Driver service with driver-name = h2
+[0m[0m11:14:21,236 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-5) WFLYUT0003: Undertow 2.4.1.Final-redhat-00001 starting
+[0m[0m11:14:21,240 INFO  [org.jboss.as.naming] (MSC service thread 1-9) WFLYNAM0003: Starting Naming Service
+[0m[0m11:14:21,249 INFO  [org.jboss.as.mail.extension] (MSC service thread 1-2) WFLYMAIL0001: Bound mail session [java:jboss/mail/Default]
+[0m[0m11:14:21,252 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 72) WFLYUT0112: The value 'require-host-http11' attribute in the '/subsystem=undertow/server=default-server/http-listener=default' resource is 'false', which will be ignored. The server now always enforces the RFC 9112 requirement that HTTP/1.1 request messages include a Host header.
+[0m[0m11:14:21,259 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 72) WFLYUT0112: The value 'require-host-http11' attribute in the '/subsystem=undertow/server=default-server/https-listener=https' resource is 'false', which will be ignored. The server now always enforces the RFC 9112 requirement that HTTP/1.1 request messages include a Host header.
+[0m[33m11:14:21,268 WARN  [org.wildfly.extension.elytron] (MSC service thread 1-5) WFLYELY00023: KeyStore file '/tmp/eap-test-01-base/configuration/application.keystore' does not exist. Used blank.
+[0m[33m11:14:21,278 WARN  [org.wildfly.extension.elytron] (MSC service thread 1-2) WFLYELY01084: KeyStore /tmp/eap-test-01-base/configuration/application.keystore not found, it will be auto-generated on first use with a self-signed certificate for host localhost
+[0m[0m11:14:21,284 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 72) WFLYUT0014: Creating file handler for path '/tmp/eap-test-01-home/welcome-content' with options [directory-listing: 'false', follow-symlink: 'false', case-sensitive: 'true', safe-symlink-paths: '[]']
+[0m[0m11:14:21,295 INFO  [org.jboss.as.ejb3] (MSC service thread 1-8) WFLYEJB0482: Strict pool mdb-strict-max-pool is using a max instance size of 64 (per class), which is derived from the number of CPUs on this host.
+[0m[0m11:14:21,295 INFO  [org.jboss.as.ejb3] (MSC service thread 1-4) WFLYEJB0481: Strict pool slsb-strict-max-pool is using a max instance size of 256 (per class), which is derived from thread worker pool sizing.
+[0m[0m11:14:21,300 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-4) WFLYUT0012: Started server default-server.
+[0m[0m11:14:21,301 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-8) Queuing requests.
+[0m[0m11:14:21,302 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-8) WFLYUT0018: Host default-host starting
+[0m[0m11:14:21,319 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-4) WFLYUT0006: Undertow HTTP listener default listening on 127.0.0.1:18080
+[0m[0m11:14:21,413 INFO  [org.jboss.as.server.deployment.scanner] (MSC service thread 1-9) WFLYDS0013: Started FileSystemDeploymentService for directory /tmp/eap-test-01-base/deployments
+[0m[0m11:14:21,419 INFO  [org.jboss.as.ejb3] (MSC service thread 1-6) WFLYEJB0493: Jakarta Enterprise Beans subsystem suspension complete
+[0m[0m11:14:21,423 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-3) WFLYUT0006: Undertow HTTPS listener https listening on 127.0.0.1:18443
+[0m[0m11:14:21,457 INFO  [org.jboss.as.connector.subsystems.datasources] (MSC service thread 1-2) WFLYJCA0001: Bound data source [java:jboss/datasources/ExampleDS]
+[0m[0m11:14:21,514 INFO  [org.jboss.ws.common.management] (MSC service thread 1-6) JBWS022052: Starting JBossWS 7.4.0.Final-redhat-00001 (Apache CXF 4.1.6.redhat-00001) 
+[0m[0m11:14:21,645 INFO  [org.infinispan.CONTAINER] (ServerService Thread Pool -- 75) ISPN000974: Virtual threads support: unavailable
+[0m[0m11:14:21,713 INFO  [org.infinispan.CONTAINER] (ServerService Thread Pool -- 80) ISPN000556: Starting user marshaller 'org.wildfly.clustering.cache.infinispan.marshalling.UserMarshaller'
+[0m[0m11:14:21,713 INFO  [org.infinispan.CONTAINER] (ServerService Thread Pool -- 79) ISPN000556: Starting user marshaller 'org.wildfly.clustering.cache.infinispan.marshalling.UserMarshaller'
+[0m[0m11:14:21,843 INFO  [org.infinispan.CONTAINER] (ServerService Thread Pool -- 78) ISPN000556: Starting user marshaller 'org.wildfly.clustering.cache.infinispan.marshalling.UserMarshaller'
+[0m[0m11:14:22,037 INFO  [org.jboss.as.server] (Controller Boot Thread) WFLYSRV0212: Resuming server
+[0m[0m11:14:22,040 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0060: Http management interface listening on http://127.0.0.1:19990/management
+[0m[0m11:14:22,040 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0051: Admin console listening on http://127.0.0.1:19990
+[0m[0m11:14:22,042 INFO  [org.jboss.as] (Controller Boot Thread) WFLYSRV0025: JBoss EAP 8.2 Beta (WildFly Core 33.0.0.Beta2-redhat-00001) started in 2268ms - Started 336 of 541 services (349 services are lazy, passive or on-demand) - Server configuration file in use: standalone.xml
+[0m[0m11:14:25,767 INFO  [org.jboss.as.repository] (management-handler-thread - 2) WFLYDR0001: Content added at location /tmp/eap-test-01-base/data/content/5b/47e18e2fe33664c64a3eb922dc8577d7a300e0/content
+[0m[0m11:14:25,781 INFO  [org.jboss.as.server.deployment] (MSC service thread 1-6) WFLYSRV0027: Starting deployment of "enhancement-test.war" (runtime-name: "enhancement-test.war")
+[0m[0m11:14:25,968 INFO  [org.jboss.as.jpa] (MSC service thread 1-6) WFLYJPA0002: Read persistence.xml for test-pu
+[0m[0m11:14:26,018 INFO  [org.jipijapa] (MSC service thread 1-9) JIPIORMV6020260: Second level cache enabled for enhancement-test.war#test-pu
+[0m[0m11:14:26,020 INFO  [org.jboss.as.jpa] (ServerService Thread Pool -- 80) WFLYJPA0010: Starting Persistence Unit (phase 1 of 2) Service 'enhancement-test.war#test-pu'
+[0m[0m11:14:26,030 INFO  [org.jboss.weld.deployer] (MSC service thread 1-6) WFLYWELD0003: Processing weld deployment enhancement-test.war
+[0m[0m11:14:26,075 INFO  [org.hibernate.Version] (ServerService Thread Pool -- 80) HHH000412: Hibernate ORM core version 6.6.51.Final-redhat-00001
+[0m[0m11:14:26,160 INFO  [org.hibernate.validator.internal.util.Version] (MSC service thread 1-6) HV000001: Hibernate Validator 8.0.3.Final-redhat-00001
+[0m[0m11:14:26,283 INFO  [org.jipijapa] (MSC service thread 1-2) JIPIORMV6020260: Second level cache enabled for enhancement-test.war#test-pu
+[0m[0m11:14:26,294 INFO  [org.hibernate.orm.connections.pooling] (ServerService Thread Pool -- 80) HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'org.jboss.as.connector.subsystems.datasources.WildFlyDataSource@73546b09']
+	Database driver: undefined/unknown
+	Database version: 2.2.9
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+[0m[0m11:14:26,298 INFO  [org.hibernate.cache.internal.RegionFactoryInitiator] (ServerService Thread Pool -- 80) HHH000025: Second-level cache region factory [org.infinispan.hibernate.cache.v6.InfinispanRegionFactory]
+[0m[0m11:14:26,310 INFO  [org.jboss.weld.Version] (MSC service thread 1-2) WELD-000900: 5.1.7 (redhat)
+[0m[0m11:14:26,380 INFO  [org.hibernate.envers.boot.internal.EnversServiceImpl] (ServerService Thread Pool -- 80) Envers integration enabled? : true
+[0m[0m11:14:26,490 INFO  [org.jboss.as.jpa] (ServerService Thread Pool -- 80) WFLYJPA0010: Starting Persistence Unit (phase 2 of 2) Service 'enhancement-test.war#test-pu'
+[0m[0m11:14:27,001 INFO  [stdout] (ServerService Thread Pool -- 80) Hibernate: 
+[0m[0m11:14:27,001 INFO  [stdout] (ServerService Thread Pool -- 80)     drop table if exists test_document cascade 
+[0m[0m11:14:27,006 INFO  [stdout] (ServerService Thread Pool -- 80) Hibernate: 
+[0m[0m11:14:27,006 INFO  [stdout] (ServerService Thread Pool -- 80)     create table test_document (
+[0m[0m11:14:27,006 INFO  [stdout] (ServerService Thread Pool -- 80)         id bigint generated by default as identity,
+[0m[0m11:14:27,006 INFO  [stdout] (ServerService Thread Pool -- 80)         content varchar(10000),
+[0m[0m11:14:27,006 INFO  [stdout] (ServerService Thread Pool -- 80)         title varchar(255) not null,
+[0m[0m11:14:27,006 INFO  [stdout] (ServerService Thread Pool -- 80)         primary key (id)
+[0m[0m11:14:27,006 INFO  [stdout] (ServerService Thread Pool -- 80)     )
+[0m[0m11:14:27,248 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 80) WFLYUT0021: Registered web context: '/enhancement-test' for server 'default-server'
+[0m[0m11:14:27,271 INFO  [org.jboss.as.server] (management-handler-thread - 2) WFLYSRV0010: Deployed "enhancement-test.war" (runtime-name : "enhancement-test.war")
+[0m[0m11:14:33,573 INFO  [org.jboss.as.server] (management-handler-thread - 2) WFLYSRV0272: Suspending server
+[0m[0m11:14:33,575 INFO  [org.jboss.as.ejb3] (management-handler-thread - 2) WFLYEJB0493: Jakarta Enterprise Beans subsystem suspension complete
+[0m[0m11:14:33,576 INFO  [org.jboss.as.server] (Management Triggered Shutdown) WFLYSRV0241: Shutting down in response to management operation 'shutdown'
+[0m[0m11:14:33,585 INFO  [org.wildfly.extension.undertow] (ServerService Thread Pool -- 15) WFLYUT0022: Unregistered web context: '/enhancement-test' from server 'default-server'
+[0m[0m11:14:33,586 INFO  [org.jboss.as.mail.extension] (MSC service thread 1-2) WFLYMAIL0002: Unbound mail session [java:jboss/mail/Default]
+[0m[0m11:14:33,587 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-2) WFLYUT0019: Host default-host stopping
+[0m[0m11:14:33,590 INFO  [org.jboss.as.jpa] (ServerService Thread Pool -- 15) WFLYJPA0011: Stopping Persistence Unit (phase 2 of 2) Service 'enhancement-test.war#test-pu'
+[0m[0m11:14:33,591 INFO  [stdout] (ServerService Thread Pool -- 15) Hibernate: 
+[0m[0m11:14:33,591 INFO  [stdout] (ServerService Thread Pool -- 15)     drop table if exists test_document cascade 
+[0m[0m11:14:33,597 INFO  [org.jboss.as.jpa] (ServerService Thread Pool -- 15) WFLYJPA0011: Stopping Persistence Unit (phase 1 of 2) Service 'enhancement-test.war#test-pu'
+[0m[0m11:14:33,598 INFO  [org.jboss.as.connector.subsystems.datasources] (MSC service thread 1-9) WFLYJCA0010: Unbound data source [java:jboss/datasources/ExampleDS]
+[0m[0m11:14:33,598 INFO  [org.jboss.as.connector.deployers.jdbc] (MSC service thread 1-9) WFLYJCA0019: Stopped Driver service with driver-name = h2
+[0m[0m11:14:33,600 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-4) WFLYUT0008: Undertow HTTPS listener https suspending
+[0m[0m11:14:33,600 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-5) WFLYUT0008: Undertow HTTP listener default suspending
+[0m[0m11:14:33,601 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-5) WFLYUT0007: Undertow HTTP listener default stopped, was bound to 127.0.0.1:18080
+[0m[0m11:14:33,601 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-4) WFLYUT0007: Undertow HTTPS listener https stopped, was bound to 127.0.0.1:18443
+[0m[0m11:14:33,601 INFO  [org.jboss.as.server.deployment] (MSC service thread 1-5) WFLYSRV0028: Stopped deployment enhancement-test.war (runtime-name: enhancement-test.war) in 22ms
+[0m[0m11:14:33,601 INFO  [org.wildfly.extension.undertow] (MSC service thread 1-2) WFLYUT0004: Undertow 2.4.1.Final-redhat-00001 stopping
+[0m[0m11:14:33,606 INFO  [org.jboss.as] (MSC service thread 1-8) WFLYSRV0050: JBoss EAP 8.2 Beta (WildFly Core 33.0.0.Beta2-redhat-00001) stopped in 27ms
+[0m
