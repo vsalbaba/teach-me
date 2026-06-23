@@ -10,6 +10,9 @@ Designing multi-agent workflows with Claude Code using git worktrees -- one agen
 ### [teach-me-ralph-loops](./teach-me-ralph-loops/)
 Preparing a 10-minute live presentation on Ralph loops for QE colleagues. Demonstrates turning manual test plan descriptions into runnable bash scripts using autonomous AI loops.
 
+### [teach-me-sandcastle](./teach-me-sandcastle/)
+Understanding Sandcastle's architecture for orchestrating AI coding agents in isolated Podman sandboxes -- branch strategies, worktree lifecycle, and AFK agent workflows.
+
 ### [teach-me-soldering](./teach-me-soldering/)
 Practical soldering for ESP32 projects -- flux paste usage, clean joint technique, troubleshooting cold/bridged/dry joints, and apartment-safe workspace setup.
 

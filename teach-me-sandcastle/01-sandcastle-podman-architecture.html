@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1: Sandcastle + Podman Architecture for Your Harness</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --surface: #24283b;
+    --surface2: #2f3447;
+    --text: #c0caf5;
+    --text-dim: #565f89;
+    --accent: #7aa2f7;
+    --accent2: #bb9af7;
+    --green: #9ece6a;
+    --red: #f7768e;
+    --orange: #ff9e64;
+    --yellow: #e0af68;
+    --cyan: #7dcfff;
+    --border: #3b4261;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  h1 {
+    color: var(--accent);
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 0.5rem;
+  }
+  h2 {
+    color: var(--accent2);
+    font-size: 1.2rem;
+    margin-top: 2rem;
+    margin-bottom: 0.8rem;
+  }
+  h3 {
+    color: var(--cyan);
+    font-size: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  p { margin-bottom: 1rem; }
+  a { color: var(--cyan); }
+  code {
+    background: var(--surface2);
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.9em;
+    color: var(--orange);
+  }
+  pre {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+    overflow-x: auto;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  pre code {
+    background: none;
+    padding: 0;
+    color: var(--text);
+  }
+  .comment { color: var(--text-dim); }
+  .keyword { color: var(--accent2); }
+  .string { color: var(--green); }
+  .fn { color: var(--accent); }
+  .type { color: var(--cyan); }
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.2rem;
+    margin: 1rem 0;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+  }
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--surface);
+    padding: 0.8rem 1rem;
+    margin: 1rem 0;
+    border-radius: 0 6px 6px 0;
+  }
+  .callout.warn {
+    border-left-color: var(--orange);
+  }
+  .callout.try {
+    border-left-color: var(--green);
+  }
+  .callout .label {
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+  }
+  .callout.warn .label { color: var(--orange); }
+  .callout.try .label { color: var(--green); }
+  .callout .label::before { margin-right: 0.5rem; }
+  .cite {
+    font-size: 0.8em;
+    color: var(--text-dim);
+  }
+  .cite a { color: var(--text-dim); text-decoration: underline; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+    font-size: 0.85rem;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.7rem;
+    text-align: left;
+  }
+  th {
+    background: var(--surface2);
+    color: var(--accent);
+  }
+  .step-num {
+    display: inline-block;
+    width: 1.8rem;
+    height: 1.8rem;
+    line-height: 1.8rem;
+    text-align: center;
+    background: var(--accent);
+    color: var(--bg);
+    border-radius: 50%;
+    font-weight: bold;
+    font-size: 0.85rem;
+    margin-right: 0.5rem;
+  }
+  .toc {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem 1.5rem;
+    margin: 1rem 0 2rem;
+  }
+  .toc a { text-decoration: none; }
+  .toc li { margin: 0.3rem 0; }
+  hr {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 2rem 0;
+  }
+</style>
+</head>
+<body>
+
+<h1>Lesson 1: Sandcastle + Podman Architecture</h1>
+<p style="color: var(--text-dim); margin-bottom: 1.5rem;">How Sandcastle sandboxes Claude Code in Podman, and what you need for your pipeline analysis harness.</p>
+
+<div class="toc">
+  <strong style="color: var(--accent);">Contents</strong>
+  <ol>
+    <li><a href="#mental-model">The Mental Model</a></li>
+    <li><a href="#bind-mount">Bind-Mount Architecture</a></li>
+    <li><a href="#podman-provider">The Podman Provider Internals</a></li>
+    <li><a href="#vertex-auth">Vertex AI Auth in the Sandbox</a></li>
+    <li><a href="#your-harness">Mapping Your Harness to Sandcastle</a></li>
+    <li><a href="#containerfile">What Goes in the Containerfile</a></li>
+    <li><a href="#next">What's Next</a></li>
+  </ol>
+</div>
+
+<h2 id="mental-model">1. The Mental Model</h2>
+
+<p>Sandcastle does three things:</p>
+<ol style="margin-left: 1.5rem; margin-bottom: 1rem;">
+  <li><strong>Spins up a container</strong> with your repo bind-mounted in</li>
+  <li><strong>Runs Claude Code inside it</strong> with <code>--dangerously-skip-permissions</code></li>
+  <li><strong>Manages git</strong> -- worktrees, branches, commits, merging back</li>
+</ol>
+
+<p>The container is the blast radius boundary. Claude Code has full autonomy <em>inside</em> the container (it can run any command, edit any file), but it cannot affect the host beyond the bind-mounted directories.</p>
+
+<div class="diagram">
+<span class="comment">  HOST (your machine)</span>
+  ┌─────────────────────────────────────────────────────┐
+  │                                                     │
+  │  <span class="type">your-project/</span>     <span class="comment"># bind-mounted into container</span>  │
+  │  ├── discover.py                                    │
+  │  ├── .claude/agents/                                │
+  │  ├── tmp/          <span class="comment"># downloaded logs</span>              │
+  │  └── insights/     <span class="comment"># analysis output</span>              │
+  │                                                     │
+  │  <span class="type">~/.config/gcloud/</span>  <span class="comment"># ADC credentials (mounted ro)</span> │
+  │                                                     │
+  └────────────┬───────────────────────────┬────────────┘
+               │ <span class="keyword">bind-mount</span>                │ <span class="keyword">bind-mount (ro)</span>
+  ┌────────────▼───────────────────────────▼────────────┐
+  │  <span class="string">PODMAN CONTAINER</span>                                   │
+  │                                                     │
+  │  /home/agent/workspace/  <span class="comment">← your project</span>            │
+  │  /home/agent/.config/gcloud/  <span class="comment">← ADC creds</span>          │
+  │                                                     │
+  │  <span class="fn">claude --print --dangerously-skip-permissions</span>      │
+  │    └── runs discover.py                             │
+  │    └── analyzes logs                                │
+  │    └── searches JIRA                                │
+  │    └── writes insights/                             │
+  │                                                     │
+  │  <span class="comment">Installed: python3, java, pyyaml, git, claude CLI</span> │
+  └─────────────────────────────────────────────────────┘
+</div>
+
+<p class="cite">Source: <a href="https://github.com/mattpocock/sandcastle">mattpocock/sandcastle README</a> -- "Bind-mount providers: the worktree directory is bind-mounted into the container, so the agent writes directly to the host filesystem through the mount."</p>
+
+<h2 id="bind-mount">2. Bind-Mount Architecture</h2>
+
+<p>Sandcastle has two types of sandbox providers. Podman is a <strong>bind-mount provider</strong>:</p>
+
+<table>
+  <tr><th>Type</th><th>How files flow</th><th>Providers</th></tr>
+  <tr>
+    <td><strong>Bind-mount</strong></td>
+    <td>Host directory mounted directly into container. Agent writes through the mount -- changes appear on host immediately.</td>
+    <td>Docker, Podman</td>
+  </tr>
+  <tr>
+    <td><strong>Isolated</strong></td>
+    <td>Sandbox has its own filesystem. Files must be explicitly synced in/out via <code>copyIn</code>/<code>copyFileOut</code>.</td>
+    <td>Vercel</td>
+  </tr>
+</table>
+
+<p>This means your <code>insights/</code> directory appears on the host as soon as Claude writes it inside the container. No copy step needed.</p>
+
+<div class="callout warn">
+  <div class="label">SELinux Note (Red Hat)</div>
+  <p>Since you're on Fedora/RHEL, SELinux is active. Sandcastle defaults <code>selinuxLabel: "z"</code> on all bind mounts, which adds the <code>:z</code> suffix to volume flags. This applies a shared SELinux label so the container can read/write the mounted directory. This is the right default for your setup.</p>
+</div>
+
+<p class="cite">Source: <a href="https://github.com/mattpocock/sandcastle/blob/main/src/sandboxes/podman.ts#L42-L48">podman.ts:42-48</a> -- selinuxLabel defaults to "z", described as "No-op on non-SELinux systems."</p>
+
+<h2 id="podman-provider">3. The Podman Provider Internals</h2>
+
+<p>Here's exactly what happens when Sandcastle creates a Podman sandbox:</p>
+
+<h3><span class="step-num">1</span> Pre-flight checks</h3>
+<ul style="margin-left: 1.5rem; margin-bottom: 0.8rem;">
+  <li>On macOS/Windows: verifies Podman Machine is running (skipped on Linux -- you're fine)</li>
+  <li>Runs <code>podman image inspect &lt;imageName&gt;</code> to verify image exists</li>
+</ul>
+
+<h3><span class="step-num">2</span> Container start</h3>
+<pre><code>podman run -d
+  --name sandcastle-&lt;uuid&gt;
+  <span class="keyword">--user</span> 1000:1000
+  <span class="keyword">--userns</span>=keep-id:uid=1000,gid=1000   <span class="comment"># rootless UID mapping</span>
+  <span class="keyword">-w</span> /home/agent/workspace              <span class="comment"># working directory</span>
+  <span class="keyword">-e</span> HOME=/home/agent                    <span class="comment"># env vars</span>
+  <span class="keyword">-e</span> CLAUDE_CODE_USE_VERTEX=1
+  <span class="keyword">-e</span> CLOUD_ML_REGION=global
+  <span class="keyword">-e</span> ANTHROPIC_VERTEX_PROJECT_ID=...
+  <span class="keyword">-v</span> /path/to/worktree:/home/agent/workspace:z  <span class="comment"># project</span>
+  <span class="keyword">-v</span> ~/.config/gcloud:/home/agent/.config/gcloud:ro,z  <span class="comment"># ADC</span>
+  <span class="keyword">--entrypoint</span> sleep
+  sandcastle:your-project
+  infinity</code></pre>
+
+<p>The container just runs <code>sleep infinity</code>. All actual work happens via <code>podman exec</code>.</p>
+
+<h3><span class="step-num">3</span> Agent execution</h3>
+<p>Sandcastle calls <code>podman exec</code> to run Claude Code inside the warm container:</p>
+<pre><code>podman exec -i sandcastle-&lt;uuid&gt; sh -c \
+  'claude --print --verbose --dangerously-skip-permissions \
+   --output-format stream-json \
+   --model claude-opus-4-8 -p -'</code></pre>
+<p>The prompt is piped via stdin (<code>-p -</code>). Output is streamed back line-by-line as JSON events.</p>
+
+<h3><span class="step-num">4</span> Cleanup</h3>
+<p><code>podman rm -f sandcastle-&lt;uuid&gt;</code> -- registered as a shutdown hook so containers are cleaned up even on SIGINT/crash.</p>
+
+<p class="cite">Source: <a href="https://github.com/mattpocock/sandcastle/blob/main/src/sandboxes/podman.ts#L222-L254">podman.ts:222-254</a> (container start), <a href="https://github.com/mattpocock/sandcastle/blob/main/src/AgentProvider.ts#L1190-L1215">AgentProvider.ts:1190-1215</a> (Claude Code command builder)</p>
+
+<h3>The <code>--userns=keep-id</code> mechanism</h3>
+<p>This is the key to rootless Podman. It maps your host UID to UID 1000 inside the container, so:</p>
+<ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+  <li>Files created inside the container are owned by <em>your</em> user on the host</li>
+  <li>Bind-mounted files are readable without permission issues</li>
+  <li>No root access needed on the host</li>
+</ul>
+
+<h2 id="vertex-auth">4. Vertex AI Auth in the Sandbox</h2>
+
+<p>Claude Code on Vertex uses <strong>Application Default Credentials (ADC)</strong>. The auth chain inside the container needs to find your credentials. Three things must be true:</p>
+
+<table>
+  <tr><th>What</th><th>How</th></tr>
+  <tr>
+    <td>Env vars set</td>
+    <td><code>CLAUDE_CODE_USE_VERTEX=1</code>, <code>CLOUD_ML_REGION=global</code>, <code>ANTHROPIC_VERTEX_PROJECT_ID=&lt;id&gt;</code></td>
+  </tr>
+  <tr>
+    <td>ADC file accessible</td>
+    <td>Mount <code>~/.config/gcloud/application_default_credentials.json</code> (read-only) into the container at the same relative path under <code>/home/agent/</code></td>
+  </tr>
+  <tr>
+    <td><code>GOOGLE_APPLICATION_CREDENTIALS</code> or default path</td>
+    <td>The ADC library checks <code>$HOME/.config/gcloud/application_default_credentials.json</code> by default. Since <code>HOME=/home/agent</code>, the mount path <code>/home/agent/.config/gcloud/</code> is found automatically.</td>
+  </tr>
+</table>
+
+<div class="callout try">
+  <div class="label">Try this</div>
+  <p>Verify your ADC credentials exist on the host:</p>
+  <pre><code>cat ~/.config/gcloud/application_default_credentials.json | python3 -c "import json,sys; d=json.load(sys.stdin); print(f'Type: {d[\"type\"]}, Project: {d.get(\"quota_project_id\",\"N/A\")}')"</code></pre>
+  <p>If this fails, run <code>gcloud auth application-default login</code> first.</p>
+</div>
+
+<p class="cite">Source: <a href="https://code.claude.com/docs/en/google-vertex-ai">Claude Code on Vertex AI docs</a> -- "Set CLAUDE_CODE_USE_VERTEX=1, CLOUD_ML_REGION, ANTHROPIC_VERTEX_PROJECT_ID."</p>
+
+<h2 id="your-harness">5. Mapping Your Harness to Sandcastle</h2>
+
+<p>Your current flow is interactive -- you talk to Claude Code agents in the IDE. With Sandcastle, there are two options:</p>
+
+<h3>Option A: <code>run()</code> with a single comprehensive prompt</h3>
+<p>Write a TypeScript orchestration script. Give Claude Code one prompt that includes the full analysis instructions (pulled from your agent definitions). Claude does everything in one shot inside the container.</p>
+
+<pre><code><span class="keyword">import</span> { run } <span class="keyword">from</span> <span class="string">"@ai-hero/sandcastle"</span>;
+<span class="keyword">import</span> { claudeCode } <span class="keyword">from</span> <span class="string">"@ai-hero/sandcastle/agents/claude-code"</span>;
+<span class="keyword">import</span> { podman } <span class="keyword">from</span> <span class="string">"@ai-hero/sandcastle/sandboxes/podman"</span>;
+
+<span class="keyword">const</span> result = <span class="keyword">await</span> <span class="fn">run</span>({
+  agent: <span class="fn">claudeCode</span>(<span class="string">"claude-opus-4-8"</span>, {
+    env: {
+      CLAUDE_CODE_USE_VERTEX: <span class="string">"1"</span>,
+      CLOUD_ML_REGION: <span class="string">"global"</span>,
+      ANTHROPIC_VERTEX_PROJECT_ID: <span class="string">"your-project-id"</span>,
+    },
+  }),
+  sandbox: <span class="fn">podman</span>({
+    selinuxLabel: <span class="string">"z"</span>,
+    mounts: [
+      { <span class="comment">// ADC credentials</span>
+        hostPath: <span class="string">"~/.config/gcloud"</span>,
+        sandboxPath: <span class="string">"/home/agent/.config/gcloud"</span>,
+        readonly: <span class="keyword">true</span>,
+      },
+    ],
+  }),
+  prompt: <span class="string">`Analyze pipeline: https://jenkins.eapqe.psi.redhat.com/...
+    Run discover.py, then analyze each failed component...`</span>,
+  branchStrategy: { type: <span class="string">"head"</span> },
+});</code></pre>
+
+<div class="callout">
+  <div class="label">Key insight</div>
+  <p>With <code>branchStrategy: { type: "head" }</code>, Claude writes directly to the bind-mounted directory. Your <code>insights/</code> and <code>tmp/</code> directories appear on the host immediately. No branch/merge ceremony needed since your harness produces reports, not code changes.</p>
+</div>
+
+<h3>Option B: <code>createSandbox()</code> for multi-step orchestration</h3>
+<p>Create the sandbox once, run multiple Claude Code invocations inside it. This maps more closely to your current multi-agent workflow:</p>
+
+<pre><code><span class="keyword">import</span> { createSandbox } <span class="keyword">from</span> <span class="string">"@ai-hero/sandcastle"</span>;
+
+<span class="keyword">const</span> sandbox = <span class="keyword">await</span> <span class="fn">createSandbox</span>({
+  agent: <span class="fn">claudeCode</span>(<span class="string">"claude-opus-4-8"</span>, { <span class="comment">/* vertex env */</span> }),
+  sandbox: <span class="fn">podman</span>({ <span class="comment">/* mounts */</span> }),
+  branchStrategy: { type: <span class="string">"head"</span> },
+});
+
+<span class="comment">// Step 1: Discovery</span>
+<span class="keyword">await</span> sandbox.<span class="fn">run</span>({ prompt: <span class="string">"Run discover.py for build URL..."</span> });
+
+<span class="comment">// Step 2: Run tests or check output between steps</span>
+<span class="keyword">const</span> { stdout } = <span class="keyword">await</span> sandbox.<span class="fn">exec</span>(<span class="string">"ls tmp/*/manifest-*.yaml"</span>);
+
+<span class="comment">// Step 3: Analysis</span>
+<span class="keyword">await</span> sandbox.<span class="fn">run</span>({ prompt: <span class="string">"Analyze all failed components..."</span> });
+
+<span class="comment">// Step 4: Synthesis</span>
+<span class="keyword">await</span> sandbox.<span class="fn">run</span>({ prompt: <span class="string">"Write pipeline summary..."</span> });
+
+<span class="keyword">await</span> sandbox.<span class="fn">close</span>();</code></pre>
+
+<p><strong>Option A is simpler</strong> -- Claude Code already knows how to orchestrate multi-step work via its Task tool internally. Option B gives you programmatic control between steps (e.g., checking that discovery succeeded before analysis). For your first attempt, start with Option A.</p>
+
+<h2 id="containerfile">6. What Goes in the Containerfile</h2>
+
+<p>Sandcastle generates a default <code>Containerfile</code> via <code>sandcastle init</code>, but yours needs extra dependencies:</p>
+
+<pre><code><span class="keyword">FROM</span> node:22-slim
+
+<span class="comment"># System dependencies</span>
+<span class="keyword">RUN</span> apt-get update && apt-get install -y --no-install-recommends \
+    git curl jq \
+    python3 python3-pip \
+    default-jre-headless \
+    && rm -rf /var/lib/apt/lists/*
+
+<span class="comment"># Python dependencies</span>
+<span class="keyword">RUN</span> pip3 install --break-system-packages pyyaml
+
+<span class="comment"># GitHub CLI (used by Sandcastle internally)</span>
+<span class="keyword">RUN</span> curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+    | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" \
+    | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    && apt-get update && apt-get install -y gh && rm -rf /var/lib/apt/lists/*
+
+<span class="comment"># Claude Code CLI</span>
+<span class="keyword">RUN</span> npm install -g @anthropic-ai/claude-code
+
+<span class="comment"># Non-root user (matches Sandcastle's default containerUid=1000)</span>
+<span class="keyword">RUN</span> useradd -m -u 1000 -s /bin/bash agent
+<span class="keyword">USER</span> agent
+<span class="keyword">WORKDIR</span> /home/agent/workspace</code></pre>
+
+<div class="callout warn">
+  <div class="label">Jenkins CLI JAR</div>
+  <p>Your <code>discover.py</code> uses a Jenkins CLI JAR. You have two options:</p>
+  <ul style="margin-left: 1.5rem;">
+    <li><strong>Mount it</strong> from host via <code>mounts: [{ hostPath: "~/Workspace/jenkins-cli", sandboxPath: "/home/agent/jenkins-cli", readonly: true }]</code></li>
+    <li><strong>Bake it</strong> into the Containerfile with a <code>COPY</code> or <code>curl</code> download</li>
+  </ul>
+  <p>Mounting is simpler and keeps the image generic. Update your <code>.env</code> inside the container to point to the mounted path.</p>
+</div>
+
+<h2 id="next">7. What's Next</h2>
+
+<p>Now that you understand the architecture, the next lesson will be hands-on:</p>
+<ol style="margin-left: 1.5rem;">
+  <li>Run <code>sandcastle init</code> in your project with the Podman provider</li>
+  <li>Customize the generated Containerfile</li>
+  <li>Build the image</li>
+  <li>Write a minimal orchestration script</li>
+  <li>Do a test run with a real pipeline URL</li>
+</ol>
+
+<div class="callout try">
+  <div class="label">Before next session</div>
+  <p>Make sure these are ready:</p>
+  <pre><code><span class="comment"># Verify Podman works</span>
+podman run --rm hello-world
+
+<span class="comment"># Verify ADC credentials</span>
+ls ~/.config/gcloud/application_default_credentials.json
+
+<span class="comment"># Verify your GCP project ID</span>
+gcloud config get-value project
+
+<span class="comment"># Install Sandcastle</span>
+cd ~/Workspace/qe/agentic-insight-into-test-pipeline-results
+npm init -y  <span class="comment"># if no package.json exists</span>
+npm install @ai-hero/sandcastle</code></pre>
+</div>
+
+<hr>
+<p style="color: var(--text-dim); font-size: 0.8rem; margin-top: 1rem;">
+  Lesson 1 of Sandcastle + Podman series | Sources:
+  <a href="https://github.com/mattpocock/sandcastle">Sandcastle repo</a> |
+  <a href="https://code.claude.com/docs/en/google-vertex-ai">Claude Code Vertex docs</a> |
+  <a href="https://github.com/mattpocock/sandcastle/blob/main/src/sandboxes/podman.ts">podman.ts source</a>
+</p>
+
+</body>
+</html>
