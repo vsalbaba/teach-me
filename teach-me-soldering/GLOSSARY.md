@@ -35,3 +35,15 @@ _Avoid_: short, blob between pins
 **Tinning**:
 Applying a thin coat of solder to a surface (tip, wire, pad) before making the final joint. Protects against oxidation and improves heat transfer.
 _Avoid_: pre-soldering, coating
+
+**Tip tinner**:
+A chemical paste (aggressive flux mixed with solder powder) used to remove heavy oxidation from a soldering tip. Applied by pressing the hot tip into the paste and rotating for 3-4 seconds. Use sparingly -- the aggressive flux degrades iron plating over time.
+_Avoid_: cleaning paste, tip cleaner (ambiguous)
+
+**Iron plating**:
+The thin protective layer of iron covering a tip's copper core. Prevents the copper from dissolving into molten solder. Once breached (by wear, abrasion, or corrosion), the tip must be replaced.
+_Avoid_: tip coating, tip surface
+
+**Brass wool**:
+A non-abrasive tip cleaning tool made of fine brass wire. Preferred over damp sponges because it cleans without dropping tip temperature and leaves a thin solder film on the tip.
+_Avoid_: brass sponge (misleading), steel wool (different and harmful)

@@ -34,7 +34,20 @@
 - [EEVblog Forum -- Beginners](https://www.eevblog.com/forum/beginners/)
   High-quality electronics forum with experienced members. Good for deeper technical questions.
 
+- [Hakko: How to Keep the Tip in Good Condition While Soldering](https://www.hakko.com/english/support/maintenance/detail.php?seq=183)
+  Official Hakko guide on tip maintenance during a session. Covers when to clean, when to tin, and when to turn off. Use for: building tip care habits.
+
+- [Hakko: How to Maximize Soldering Iron Tip Life](https://kb.hakkousa.com/Knowledgebase/10322/How-to-Maximize-Soldering-Iron-Tip-Life)
+  Detailed guide on tip lifespan factors: temperature, cleaning method, storage. Use for: understanding why tips die and how to slow it.
+
+- [Metcal: How to Remove Oxidation from Your Solder Tips](https://www.metcal.com/solder-tips/how-to-remove-oxidation-from-your-solder-tips/)
+  Step-by-step oxidation removal (mild to severe) with explanation of tip anatomy and plating. Use for: rescuing oxidized tips.
+
+- [iFixit: How to Clean and Tin a Soldering Iron Tip](https://www.ifixit.com/Guide/How+to+Clean+and+Tin+a+Soldering+Iron+Tip/175931)
+  Practical guide with photos covering cleaning, tinning, tip tinner usage, and when to replace. Use for: hands-on tip maintenance reference.
+
 ## Gaps
 
 - No video resource yet for flux paste application specifically on ESP32 breakout boards with Pinecil
 - No trusted resource comparing NC-223-ASM flux quality vs. genuine Amtech or Chipquik alternatives
+- No resource yet on choosing between Pinecil tip shapes for different jobs

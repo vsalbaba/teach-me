@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 2: Why Your Tip Stops Working (and How to Fix It)</title>
+<style>
+  :root {
+    --bg: #1a1a2e;
+    --surface: #16213e;
+    --surface2: #0f3460;
+    --accent: #e94560;
+    --accent2: #ff6b6b;
+    --text: #eee;
+    --text-muted: #a0a0b0;
+    --success: #4ecdc4;
+    --warning: #f39c12;
+    --code-bg: #0d1117;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent2);
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--success);
+    border-bottom: 2px solid var(--surface2);
+    padding-bottom: 0.5rem;
+  }
+
+  h3 {
+    font-size: 1.15rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent2);
+  }
+
+  p { margin-bottom: 1rem; }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+
+  .concept-box {
+    background: var(--surface);
+    border-left: 4px solid var(--accent);
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .concept-box strong { color: var(--accent2); }
+
+  .try-this {
+    background: linear-gradient(135deg, #0f3460 0%, #1a1a4e 100%);
+    border: 2px solid var(--success);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .try-this::before {
+    content: "Try This";
+    display: block;
+    font-weight: bold;
+    color: var(--success);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .warning-box {
+    background: rgba(243, 156, 18, 0.1);
+    border: 2px solid var(--warning);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .warning-box::before {
+    content: "Important";
+    display: block;
+    font-weight: bold;
+    color: var(--warning);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .lifecycle {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin: 1.5rem 0;
+  }
+
+  .lifecycle-step {
+    background: var(--surface);
+    padding: 1.2rem 1.5rem;
+    border-left: 4px solid var(--success);
+    position: relative;
+  }
+
+  .lifecycle-step:not(:last-child) {
+    border-bottom: 1px solid var(--surface2);
+  }
+
+  .lifecycle-step:first-child { border-radius: 8px 8px 0 0; }
+  .lifecycle-step:last-child { border-radius: 0 0 8px 8px; }
+
+  .lifecycle-step .phase {
+    font-weight: bold;
+    color: var(--success);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.3rem;
+  }
+
+  .lifecycle-step.danger { border-left-color: var(--accent); }
+  .lifecycle-step.danger .phase { color: var(--accent); }
+
+  .comparison {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+
+  .comparison > div {
+    background: var(--surface);
+    padding: 1.2rem;
+    border-radius: 8px;
+  }
+
+  .comparison .bad { border-top: 3px solid var(--accent); }
+  .comparison .good { border-top: 3px solid var(--success); }
+  .comparison h4 { margin-bottom: 0.5rem; }
+  .comparison .bad h4 { color: var(--accent); }
+  .comparison .good h4 { color: var(--success); }
+
+  .escalation {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    counter-reset: level;
+  }
+
+  .escalation-level {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    position: relative;
+    padding-left: 4rem;
+  }
+
+  .escalation-level::before {
+    counter-increment: level;
+    content: "Level " counter(level);
+    position: absolute;
+    left: 1rem;
+    top: 1.2rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+
+  .escalation-level.mild { border-left: 4px solid var(--success); }
+  .escalation-level.moderate { border-left: 4px solid var(--warning); }
+  .escalation-level.severe { border-left: 4px solid var(--accent); }
+  .escalation-level.dead { border-left: 4px solid #666; }
+
+  ol, ul {
+    margin: 0.5rem 0 1rem 1.5rem;
+  }
+
+  li { margin-bottom: 0.4rem; }
+
+  a {
+    color: var(--success);
+    text-decoration: none;
+    border-bottom: 1px dotted var(--success);
+  }
+
+  a:hover { color: var(--accent2); border-bottom-color: var(--accent2); }
+
+  .cite {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .diagram {
+    font-family: monospace;
+    background: var(--code-bg);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    overflow-x: auto;
+    white-space: pre;
+    color: var(--text-muted);
+  }
+
+  .toc {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .toc h3 { margin-top: 0; color: var(--text-muted); }
+  .toc ol { margin-bottom: 0; }
+  .toc a { color: var(--text); border-bottom: none; }
+  .toc a:hover { color: var(--success); }
+
+  .quiz-section {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .quiz-question {
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: var(--accent2);
+  }
+
+  .quiz-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--surface2);
+    color: var(--text);
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+  }
+
+  .quiz-option:hover { border-color: var(--accent); }
+  .quiz-option.correct { border-color: var(--success); background: rgba(78, 205, 196, 0.15); }
+  .quiz-option.wrong { border-color: var(--accent); background: rgba(233, 69, 96, 0.15); }
+
+  .quiz-feedback {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    display: none;
+  }
+
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct-fb { background: rgba(78, 205, 196, 0.15); border: 1px solid var(--success); }
+  .quiz-feedback.wrong-fb { background: rgba(233, 69, 96, 0.15); border: 1px solid var(--accent); }
+
+  .habit-card {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 1.2rem 1.5rem;
+    margin: 0.8rem 0;
+    display: grid;
+    grid-template-columns: 4rem 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+
+  .habit-when {
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--success);
+    padding-top: 0.2rem;
+  }
+
+  .habit-what strong { color: var(--accent2); }
+
+  .recap-box {
+    background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
+    border: 2px solid var(--accent2);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+
+  .recap-box h3 {
+    color: var(--accent2);
+    margin-top: 0;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 1rem; }
+    .comparison { grid-template-columns: 1fr; }
+    .habit-card { grid-template-columns: 1fr; }
+    h1 { font-size: 1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Lesson 2: Why Your Tip Stops Working (and How to Fix It)</h1>
+<p class="subtitle">The care habits that keep solder flowing -- and how to rescue a dead tip</p>
+
+<div class="toc">
+  <h3>Contents</h3>
+  <ol>
+    <li><a href="#problem">What's actually happening when solder beads off</a></li>
+    <li><a href="#anatomy">What's inside your tip (and why it matters)</a></li>
+    <li><a href="#oxidation">How oxidation kills your tip -- slowly</a></li>
+    <li><a href="#habits">The four habits that prevent it</a></li>
+    <li><a href="#rescue">Rescuing an oxidized tip (escalation ladder)</a></li>
+    <li><a href="#never">What to NEVER do</a></li>
+    <li><a href="#replace">When to give up and replace</a></li>
+    <li><a href="#pinecil">Pinecil V2 specifics</a></li>
+    <li><a href="#quiz">Check your understanding</a></li>
+  </ol>
+</div>
+
+<h2 id="problem">1. What's Actually Happening</h2>
+
+<p>You described the problem perfectly: the tip stops "attracting" solder, and it beads up and rolls off. In Lesson 1, you learned that <strong>oxide blocks wetting</strong> on PCB pads. The exact same thing happens to your tip.</p>
+
+<div class="concept-box">
+  <strong>Your tip is a heat-transfer tool.</strong> Its only job is to conduct heat from the heating element to the joint. When the tip is coated in a thin layer of solder (tinned), it transfers heat efficiently -- the molten solder on the tip makes direct metal-to-metal contact with the workpiece. When the tip is oxidized, the oxide layer acts as a thermal insulator. Heat can't get through. Solder can't wet. Everything fails.
+  <br><br>
+  <span class="cite">Source: <a href="https://www.hakko.com/english/support/maintenance/detail.php?seq=183">Hakko -- Keeping the Tip in Good Condition</a></span>
+</div>
+
+<p>This is why an oxidized tip feels like it "stopped heating up" even though the temperature readout hasn't changed. The element is hot, but the oxide is blocking the heat from reaching the solder.</p>
+
+<h2 id="anatomy">2. What's Inside Your Tip</h2>
+
+<p>Understanding tip construction explains why certain things kill tips and others don't.</p>
+
+<div class="diagram">  Cross-section of a soldering tip:
+
+  ┌─────────────────────────────┐
+  │  Iron plating (working      │ <-- Thin protective layer
+  │  surface you solder with)   │     Wets with solder
+  │  ┌───────────────────────┐  │     Oxidizes over time
+  │  │                       │  │
+  │  │   Copper core         │  │ <-- Excellent heat conductor
+  │  │   (bulk of the tip)   │  │     Dissolves into solder
+  │  │                       │  │     if exposed
+  │  └───────────────────────┘  │
+  └─────────────────────────────┘</div>
+
+<p>The <strong>copper core</strong> conducts heat from the heating element to the tip surface. The <strong>iron plating</strong> protects the copper from dissolving into the solder (copper is highly soluble in molten tin). The iron layer is thin -- typically 30-50 microns.</p>
+
+<div class="concept-box">
+  <strong>The iron plating is the tip's lifespan.</strong> Once the iron is gone (from wear, corrosion, or physical damage), the copper underneath dissolves into solder, creating pits and holes. No amount of tinning or flux can fix a tip with compromised plating.
+  <br><br>
+  <span class="cite">Source: <a href="https://www.ifixit.com/Guide/How+to+Clean+and+Tin+a+Soldering+Iron+Tip/175931">iFixit -- How to Clean and Tin a Tip</a>, <a href="https://www.metcal.com/solder-tips/how-to-remove-oxidation-from-your-solder-tips/">Metcal -- How to Remove Oxidation</a></span>
+</div>
+
+<h2 id="oxidation">3. How Oxidation Kills Your Tip</h2>
+
+<p>Oxidation is a chemical reaction: iron + oxygen = iron oxide. It happens at room temperature (slowly) and at soldering temperatures (fast). Here's how it progresses:</p>
+
+<div class="lifecycle">
+  <div class="lifecycle-step">
+    <div class="phase">Healthy</div>
+    <strong>Tip is tinned</strong> -- a thin solder coat covers the iron. Solder wets easily. Heat transfers efficiently. The solder layer seals the iron from air.
+  </div>
+  <div class="lifecycle-step">
+    <div class="phase">Exposed</div>
+    <strong>Solder coat burns off or is wiped away.</strong> The bare iron is now exposed to air at 300+C. Oxide starts forming immediately -- you have seconds, not minutes.
+  </div>
+  <div class="lifecycle-step danger">
+    <div class="phase">Oxidizing</div>
+    <strong>Oxide layer grows.</strong> The tip darkens. Solder starts to bead instead of coating. You can still fix this easily with flux and fresh solder.
+  </div>
+  <div class="lifecycle-step danger">
+    <div class="phase">Severely oxidized</div>
+    <strong>Thick oxide layer.</strong> Tip is dark grey or black. Solder balls up completely and rolls off. Normal tinning doesn't work -- the oxide is too thick for rosin-core flux to cut through. You need chemical tip tinner.
+  </div>
+  <div class="lifecycle-step danger">
+    <div class="phase">Damaged</div>
+    <strong>Iron plating compromised.</strong> Pits, holes, or cracks in the plating. Copper is dissolving. The tip is dying. Replace it.
+  </div>
+</div>
+
+<p class="cite">Sources: <a href="https://www.metcal.com/solder-tips/how-to-remove-oxidation-from-your-solder-tips/">Metcal</a>, <a href="https://www.hakko.com/english/support/maintenance/detail.php?seq=183">Hakko</a></p>
+
+<div class="concept-box">
+  <strong>Temperature is the accelerator.</strong> Oxidation at 400C happens roughly twice as fast as at 350C. Your old transformer iron had no temperature control -- it may have been running at 450C+ and cooking the tips into oblivion while you worked. The Pinecil V2's temperature control is your biggest weapon against this.
+  <br><br>
+  <span class="cite">Source: <a href="https://kb.hakkousa.com/Knowledgebase/10322/How-to-Maximize-Soldering-Iron-Tip-Life">Hakko -- How to Maximize Tip Life</a></span>
+</div>
+
+<h2 id="habits">4. The Four Habits That Prevent It</h2>
+
+<p>Tip care is not a repair procedure. It's a set of habits you build into every soldering session. Think of it as a ritual with four moments:</p>
+
+<div class="habit-card">
+  <div class="habit-when">Start of session</div>
+  <div class="habit-what">
+    <strong>Heat up, then clean, then tin.</strong> Power on the Pinecil. Wait for it to reach temperature. Wipe the old solder off on brass wool. Immediately melt fresh solder onto the tip. The tip should look shiny silver. Now you're ready to solder.
+  </div>
+</div>
+
+<div class="habit-card">
+  <div class="habit-when">During work</div>
+  <div class="habit-what">
+    <strong>Clean before each joint, not after.</strong> This is the habit most people get backwards. Clean the tip on brass wool, then immediately make the joint. Don't clean and then set the iron down -- that leaves a bare tip exposed to air. If you're pausing between joints, leave the solder on the tip.
+    <br><br>
+    <span class="cite">Source: <a href="https://www.hakko.com/english/support/maintenance/detail.php?seq=183">Hakko -- "Clean the tip <em>before</em> soldering. If you clean it <em>after</em>, tip oxidation will accelerate."</a></span>
+  </div>
+</div>
+
+<div class="habit-card">
+  <div class="habit-when">Pausing (in holder)</div>
+  <div class="habit-what">
+    <strong>Leave solder on the tip.</strong> When the iron sits in the holder between joints, the solder coat protects the iron from air. If it looks like the solder has burned off, add more before you set it down. If you're pausing for more than 5 minutes, turn the iron off entirely -- the Pinecil V2 also has a sleep mode that drops temperature automatically.
+    <br><br>
+    <span class="cite">Source: <a href="https://www.hakko.com/english/support/maintenance/detail.php?seq=183">Hakko</a>, <a href="https://wiki.pine64.org/wiki/Pinecil_Guides_to_Soldering">PINE64 Wiki</a></span>
+  </div>
+</div>
+
+<div class="habit-card">
+  <div class="habit-when">End of session</div>
+  <div class="habit-what">
+    <strong>Tin generously, then power off.</strong> Before you turn off the iron, melt a generous blob of solder onto the entire working surface of the tip -- not just the very point, but the sides too. This blob will solidify and seal the tip from air while it's stored. Next time you heat up, you'll wipe this off and re-tin with fresh solder.
+    <br><br>
+    <span class="cite">Source: <a href="https://www.ifixit.com/Guide/How+to+Clean+and+Tin+a+Soldering+Iron+Tip/175931">iFixit</a>, <a href="https://stellartechnical.com/blogs/electronic-assembly-technical-resources/the-importance-of-re-tinning-your-soldering-iron-tips">Stellar Technical</a></span>
+  </div>
+</div>
+
+<div class="try-this">
+  <strong>Check your brass wool situation.</strong> Do you have a brass wool tip cleaner? If not, this is the one thing worth buying. It cleans without dropping the tip temperature (unlike a wet sponge) and leaves a thin solder film behind. A brass wool cleaner with a rosin-filled base (like the Hakko 599B style) is ideal -- the rosin adds a bit of flux during cleaning.
+  <br><br>
+  If you've been using a damp sponge, you can keep using it, but know that every wipe drops the tip temperature by 10-20C and removes all solder -- leaving the tip temporarily bare and vulnerable. Brass wool is gentler.
+</div>
+
+<h2 id="rescue">5. Rescuing an Oxidized Tip</h2>
+
+<p>If your tip is already dark and refusing solder, here's the escalation ladder. Start at Level 1 and move up only if the previous step doesn't work.</p>
+
+<div class="escalation">
+  <div class="escalation-level mild">
+    <h3>Flux + fresh solder</h3>
+    <p>For light oxidation (tip is dull but not black). Set the Pinecil to ~300C. Apply your NC-223-ASM flux paste directly to the tip. Immediately melt solder onto the fluxed surface. The flux dissolves the thin oxide, and the solder wets and tins the tip. Wipe on brass wool. Repeat if needed.</p>
+    <p>This is the same fix from Lesson 1, Quiz Question 5 -- and it works for most cases.</p>
+    <p class="cite">Source: <a href="https://www.metcal.com/solder-tips/how-to-remove-oxidation-from-your-solder-tips/">Metcal</a></p>
+  </div>
+
+  <div class="escalation-level moderate">
+    <h3>Tip tinner (chemical paste)</h3>
+    <p>For moderate-to-severe oxidation (tip is dark grey/black, flux alone doesn't cut through). Tip tinner is a small tin of aggressive flux mixed with solder powder. Heat the iron to working temperature. Press the tip into the tin and rotate slowly for 3-4 seconds. The tip should come out looking shiny. Immediately wipe off residue on brass wool, then apply fresh solder.</p>
+    <p><strong>Use sparingly</strong> -- the aggressive flux in tip tinner eats into the iron plating over time. iFixit recommends no more than every 20-30 sessions. Think of it as medicine, not daily vitamins.</p>
+    <p class="cite">Source: <a href="https://www.ifixit.com/Guide/How+to+Clean+and+Tin+a+Soldering+Iron+Tip/175931">iFixit</a>, <a href="https://www.qsource.com/blog/481/how-to-use-tip-tinner-6-easy-steps-q-source">Q Source</a></p>
+  </div>
+
+  <div class="escalation-level severe">
+    <h3>Brass brush + tip tinner</h3>
+    <p>For very stubborn oxidation. Gently brush the hot tip with a brass wire brush to mechanically break up the thickest oxide, then immediately apply tip tinner as above. The brush loosens what the chemistry can't reach.</p>
+    <p>Do not press hard. Do not use steel brushes. You're trying to dislodge oxide, not scrape the plating.</p>
+    <p class="cite">Source: <a href="https://www.ifixit.com/Guide/How+to+Clean+and+Tin+a+Soldering+Iron+Tip/175931">iFixit</a></p>
+  </div>
+
+  <div class="escalation-level dead">
+    <h3>Replace the tip</h3>
+    <p>If none of the above works, or you can see pits, holes, or copper-colored spots on the tip, the iron plating is compromised. No amount of flux or tip tinner will fix structural damage. Pinecil tips are relatively cheap -- buy a new one.</p>
+    <p class="cite">Source: <a href="https://wiki.pine64.org/wiki/Pinecil_Tips">PINE64 Wiki -- Pinecil Tips</a></p>
+  </div>
+</div>
+
+<h2 id="never">6. What to NEVER Do</h2>
+
+<div class="warning-box">
+  <ul>
+    <li><strong>Never use sandpaper, files, or abrasive pads on the tip.</strong> These strip the thin iron plating, exposing the copper underneath. Once the copper is exposed, the tip degrades rapidly and permanently. <span class="cite">(<a href="https://www.metcal.com/solder-tips/how-to-remove-oxidation-from-your-solder-tips/">Metcal</a>)</span></li>
+    <li><strong>Never bang the tip against the bench</strong> to shake off solder. This can crack the iron plating. <span class="cite">(<a href="https://kb.hakkousa.com/Knowledgebase/10322/How-to-Maximize-Soldering-Iron-Tip-Life">Hakko</a>)</span></li>
+    <li><strong>Never leave the iron on and idle at working temperature</strong> for extended periods. The exposed tip oxidizes rapidly at 300+C with nothing to do. Use the Pinecil's sleep mode, or turn it off.</li>
+    <li><strong>Never clean the tip and then put it down.</strong> Always tin immediately after cleaning. A bare, hot tip starts oxidizing within seconds.</li>
+    <li><strong>Never leave the tip clean for storage.</strong> Always coat it with solder before powering down.</li>
+  </ul>
+</div>
+
+<h2 id="replace">7. When to Give Up and Replace</h2>
+
+<p>Inspect your tip (while cool) with good light. Look for:</p>
+
+<div class="comparison">
+  <div class="bad">
+    <h4>Replace if you see</h4>
+    <ul>
+      <li>Pits or holes in the surface</li>
+      <li>Copper color showing through (reddish/pinkish spots)</li>
+      <li>Cracks in the plating</li>
+      <li>Deformed or misshapen tip end</li>
+      <li>Solder still won't wet after tip tinner treatment</li>
+    </ul>
+  </div>
+  <div class="good">
+    <h4>Salvageable if you see</h4>
+    <ul>
+      <li>Dark discoloration (oxidation, not damage)</li>
+      <li>Black residue on the shaft (normal flux charring)</li>
+      <li>Surface looks uniform but won't tin</li>
+      <li>No physical damage, just chemical buildup</li>
+    </ul>
+  </div>
+</div>
+
+<p>Pinecil tips are widely available and cost a few dollars each. The <a href="https://wiki.pine64.org/wiki/Pinecil_Tips">PINE64 Wiki</a> has a compatibility guide. Don't fight a dead tip -- replace it and protect the new one.</p>
+
+<h2 id="pinecil">8. Pinecil V2 Specifics</h2>
+
+<h3>Sleep mode is your friend</h3>
+<p>The Pinecil V2 has motion-based sleep. If you set it down and don't move it for a configurable period, it drops to a lower temperature automatically. This dramatically slows oxidation during pauses. Make sure this feature is enabled in your firmware settings.</p>
+
+<h3>New tip setup</h3>
+<p>When you get a new Pinecil tip, <a href="https://wiki.pine64.org/wiki/Pinecil_Tips">PINE64 recommends</a> wiping the contacts (the white end) with isopropyl alcohol or a dry cloth to remove factory residue. Then heat it to 350C, apply solder to the working end, and wipe clean on brass wool. Repeat a few times. Some tips ship pre-tinned -- they may look odd until you wipe them clean and re-tin.</p>
+
+<h3>Tip swapping</h3>
+<p>Always unplug the Pinecil before changing tips. The V2 auto-detects tip resistance at power-up, so hot-swapping can cause strange temperature behavior.</p>
+
+<h3>Short tips need more power</h3>
+<p>If you're using Pine64's newer Short tips (ST-B2), they need more power due to lower resistance. Make sure you're using at least a 65W USB-C PD charger at 20V.</p>
+
+<p class="cite">Source: <a href="https://wiki.pine64.org/wiki/Pinecil_Tips">PINE64 Wiki -- Pinecil Tips</a>, <a href="https://wiki.pine64.org/wiki/Pinecil_Guides_to_Soldering">PINE64 Wiki -- Guides to Soldering</a></p>
+
+<h2 id="quiz">Check Your Understanding</h2>
+
+<div class="quiz-section">
+  <div class="quiz-question">1. You just finished soldering a row of header pins. What do you do with the tip before putting the iron back in the holder?</div>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Wipe it clean on the sponge so it's ready for next time</button>
+  <button class="quiz-option" onclick="checkAnswer(this, true)">Melt solder onto the tip so it's coated, then set it down</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Turn off the iron immediately to prevent oxidation</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Dip the tip in flux paste to protect it</button>
+  <div class="quiz-feedback correct-fb">Correct. Always leave a solder coat on the tip when it's idle. The solder seals the iron from air and prevents oxidation. A clean, bare tip starts oxidizing immediately at working temperature.</div>
+  <div class="quiz-feedback wrong-fb">A clean, bare tip at working temperature starts oxidizing within seconds. <strong>Coat the tip with solder</strong> before setting the iron down -- the solder acts as a barrier against air.</div>
+</div>
+
+<div class="quiz-section">
+  <div class="quiz-question">2. Your tip is dark grey and solder beads off it. You try applying NC-223-ASM flux paste and melting solder onto it, but it still won't wet. What's the next step?</div>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Sand it lightly with fine sandpaper</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Turn the temperature up to 400C and try again</button>
+  <button class="quiz-option" onclick="checkAnswer(this, true)">Use tip tinner (chemical paste) -- rotate the tip in it for 3-4 seconds</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Replace the tip immediately</button>
+  <div class="quiz-feedback correct-fb">Correct. Tip tinner contains aggressive flux strong enough to cut through heavy oxidation. Use it sparingly -- the aggressive chemicals degrade the iron plating with overuse. Save sandpaper as an absolute last resort (and plan to replace the tip after).</div>
+  <div class="quiz-feedback wrong-fb">When normal flux can't cut through, escalate to <strong>tip tinner</strong> (chemical paste). Never reach for sandpaper early -- it strips the iron plating. And cranking up heat makes oxidation worse, not better.</div>
+</div>
+
+<div class="quiz-section">
+  <div class="quiz-question">3. Why is brass wool preferred over a damp sponge for cleaning the tip?</div>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Brass wool removes more oxidation</button>
+  <button class="quiz-option" onclick="checkAnswer(this, true)">It cleans without dropping the tip temperature, and leaves a thin solder film</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Damp sponges damage the iron plating</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Brass wool adds flux to the tip</button>
+  <div class="quiz-feedback correct-fb">Correct. A damp sponge creates a thermal shock -- the tip temperature drops 10-20C on each wipe, stressing the plating and leaving the tip bare. Brass wool cleans at temperature and leaves a thin protective solder residue behind.</div>
+  <div class="quiz-feedback wrong-fb">Brass wool's advantage is <strong>thermal gentleness</strong>. It cleans at full temperature (no thermal shock) and leaves a thin solder film on the tip. A damp sponge drops the temperature on every wipe and strips the tip completely bare.</div>
+</div>
+
+<div class="quiz-section">
+  <div class="quiz-question">4. You see a small copper-colored pit on your tip. What should you do?</div>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Fill it with solder and keep using the tip</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Apply tip tinner to rebuild the iron plating</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Sand the area smooth and re-tin</button>
+  <button class="quiz-option" onclick="checkAnswer(this, true)">Replace the tip -- the iron plating is compromised</button>
+  <div class="quiz-feedback correct-fb">Correct. Exposed copper means the iron plating has been breached. The copper will dissolve into solder, enlarging the pit. No chemical treatment can rebuild the plating. The tip needs to be replaced.</div>
+  <div class="quiz-feedback wrong-fb">Copper showing through means the iron plating is <strong>permanently compromised</strong>. No flux, tip tinner, or sanding can rebuild the plating -- the copper will continue dissolving into solder. <strong>Replace the tip.</strong></div>
+</div>
+
+<div class="quiz-section">
+  <div class="quiz-question">5. When during your soldering session should you clean the tip?</div>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">After making each joint, before setting the iron down</button>
+  <button class="quiz-option" onclick="checkAnswer(this, true)">Before making each joint, just before you start</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Only at the start and end of the session</button>
+  <button class="quiz-option" onclick="checkAnswer(this, false)">Only when you notice solder isn't flowing well</button>
+  <div class="quiz-feedback correct-fb">Correct. Clean <em>before</em> the joint, then solder immediately. If you clean <em>after</em>, the bare tip sits exposed in the holder, oxidizing while you set up the next joint. Hakko specifically recommends this sequence.</div>
+  <div class="quiz-feedback wrong-fb">Hakko's guidance is clear: clean <strong>before</strong> you solder, not after. Cleaning after leaves the tip bare in the holder, where it oxidizes while waiting. Clean, then solder immediately -- the joint protects the tip.</div>
+</div>
+
+<div class="recap-box">
+  <h3>The One Rule</h3>
+  <p>Everything in this lesson comes down to one idea: <strong>never leave a hot tip bare.</strong> Bare iron + oxygen + heat = oxide. Oxide blocks wetting. Blocked wetting = solder beads off.</p>
+  <p>If you build the four habits (tin at start, clean before joints, leave solder on when idle, tin before storage), your tips will last far longer than your old ones did.</p>
+</div>
+
+<script>
+function checkAnswer(btn, isCorrect) {
+  const section = btn.closest('.quiz-section');
+  const buttons = section.querySelectorAll('.quiz-option');
+  const feedbacks = section.querySelectorAll('.quiz-feedback');
+
+  if (section.dataset.answered) return;
+  section.dataset.answered = 'true';
+
+  buttons.forEach(b => b.style.cursor = 'default');
+
+  if (isCorrect) {
+    btn.classList.add('correct');
+    feedbacks.forEach(f => {
+      if (f.classList.contains('correct-fb')) f.classList.add('show');
+    });
+  } else {
+    btn.classList.add('wrong');
+    buttons.forEach(b => {
+      if (b.getAttribute('onclick').includes('true')) b.classList.add('correct');
+    });
+    feedbacks.forEach(f => {
+      if (f.classList.contains('wrong-fb')) f.classList.add('show');
+    });
+  }
+}
+</script>
+
+</body>
+</html>
