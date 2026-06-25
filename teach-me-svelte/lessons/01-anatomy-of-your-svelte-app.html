@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1: Anatomy of Your Svelte App</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface-bright: #334155;
+    --text: #e2e8f0;
+    --text-muted: #94a3b8;
+    --accent: #818cf8;
+    --accent-dim: #4f46e5;
+    --green: #34d399;
+    --amber: #fbbf24;
+    --red: #f87171;
+    --code-bg: #0d1117;
+    --border: #334155;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 2rem;
+    max-width: 52rem;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: var(--accent);
+  }
+
+  h2 {
+    font-size: 1.4rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--green);
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.4rem;
+  }
+
+  h3 {
+    font-size: 1.1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--amber);
+  }
+
+  p { margin-bottom: 1rem; }
+
+  code {
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+    background: var(--code-bg);
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: var(--accent);
+  }
+
+  pre {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    overflow-x: auto;
+    margin-bottom: 1.2rem;
+    line-height: 1.5;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    font-size: 0.85rem;
+  }
+
+  .comment { color: #6b7280; }
+  .keyword { color: #c084fc; }
+  .string { color: #34d399; }
+  .tag { color: #f87171; }
+  .attr { color: #fbbf24; }
+  .type { color: #38bdf8; }
+  .punct { color: #94a3b8; }
+
+  .callout {
+    border-left: 4px solid var(--accent);
+    background: rgba(129, 140, 248, 0.08);
+    padding: 1rem 1.2rem;
+    margin: 1.2rem 0;
+    border-radius: 0 8px 8px 0;
+  }
+
+  .callout-try {
+    border-left-color: var(--green);
+    background: rgba(52, 211, 153, 0.08);
+  }
+
+  .callout-ts {
+    border-left-color: var(--amber);
+    background: rgba(251, 191, 36, 0.08);
+  }
+
+  .callout-label {
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.4rem;
+  }
+
+  .callout .callout-label { color: var(--accent); }
+  .callout-try .callout-label { color: var(--green); }
+  .callout-ts .callout-label { color: var(--amber); }
+
+  .file-tree {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    margin-bottom: 1.2rem;
+    line-height: 1.8;
+  }
+
+  .file-tree .dir { color: var(--accent); }
+  .file-tree .file { color: var(--text-muted); }
+  .file-tree .highlight { color: var(--green); font-weight: 700; }
+  .file-tree .annotation { color: #6b7280; font-style: italic; }
+
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.2rem 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    line-height: 2;
+  }
+
+  .diagram .box {
+    display: inline-block;
+    border: 2px solid var(--accent);
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    margin: 0.3rem;
+  }
+
+  .diagram .arrow { color: var(--text-muted); margin: 0 0.5rem; }
+
+  a {
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  a:hover { color: var(--green); }
+
+  .section-num {
+    color: var(--text-muted);
+    font-size: 0.8em;
+    margin-right: 0.3rem;
+  }
+
+  .quiz-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+
+  .quiz-question {
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+
+  .quiz-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.5rem;
+    background: var(--surface-bright);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+  }
+
+  .quiz-btn:hover { border-color: var(--accent); }
+  .quiz-btn.correct { border-color: var(--green); background: rgba(52, 211, 153, 0.15); }
+  .quiz-btn.wrong { border-color: var(--red); background: rgba(248, 113, 113, 0.1); }
+
+  .quiz-feedback {
+    margin-top: 0.8rem;
+    padding: 0.8rem;
+    border-radius: 6px;
+    display: none;
+  }
+
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: rgba(52, 211, 153, 0.1); color: var(--green); }
+  .quiz-feedback.wrong { background: rgba(248, 113, 113, 0.1); color: var(--red); }
+
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+
+  ul, ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+
+  li { margin-bottom: 0.4rem; }
+
+  .cite {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    vertical-align: super;
+  }
+</style>
+</head>
+<body>
+
+<h1>Lesson 1: Anatomy of Your Svelte App</h1>
+<p class="subtitle">Understanding what every file does in your music-interval-training app</p>
+
+<!-- ============================== -->
+<h2><span class="section-num">1.</span> What Is Svelte?</h2>
+
+<p>
+  Svelte is a <strong>compiler</strong> for building user interfaces. Unlike React or Vue, which ship a runtime library to the browser and do work there, Svelte does its heavy lifting at <strong>build time</strong>. When you run <code>npm run build</code>, Svelte reads your <code>.svelte</code> files and compiles them into plain JavaScript that directly manipulates the browser's DOM (the page elements you see).
+  <a href="https://svelte.dev/docs/svelte/getting-started" class="cite">[svelte.dev]</a>
+</p>
+
+<p>This means:</p>
+<ul>
+  <li><strong>No virtual DOM</strong> -- Svelte generates code that updates exactly the parts of the page that changed, nothing more</li>
+  <li><strong>Smaller bundles</strong> -- there's no framework runtime shipped to the user's browser</li>
+  <li><strong>Less boilerplate</strong> -- a Svelte component is closer to plain HTML than most frameworks</li>
+</ul>
+
+<div class="callout">
+  <div class="callout-label">Key Idea</div>
+  React/Vue: your code + framework runtime are sent to the browser, and the framework interprets your components at runtime.<br>
+  Svelte: your code is compiled into optimized vanilla JS at build time. The browser gets just the result.
+</div>
+
+<!-- ============================== -->
+<h2><span class="section-num">2.</span> Svelte vs. SvelteKit</h2>
+
+<p>Your app uses <strong>two things</strong>, and it's important to know which is which:</p>
+
+<ul>
+  <li><strong>Svelte</strong> -- the component language. Each <code>.svelte</code> file is a component. Svelte handles how components look and behave.
+    <a href="https://svelte.dev/docs" class="cite">[svelte.dev/docs]</a>
+  </li>
+  <li><strong>SvelteKit</strong> -- the app framework built on top of Svelte. It handles routing (which URL shows which page), the dev server, building for production, and more.
+    <a href="https://svelte.dev/docs/kit/introduction" class="cite">[svelte.dev/docs/kit]</a>
+  </li>
+</ul>
+
+<p>Think of it like this: Svelte is the <strong>brick</strong>, SvelteKit is the <strong>house</strong>. Svelte teaches you how to build individual UI pieces. SvelteKit tells you where to put them so they form a working web app.</p>
+
+<!-- ============================== -->
+<h2><span class="section-num">3.</span> Your App's File Structure</h2>
+
+<p>Here's what the important files and folders in your project do:</p>
+
+<div class="file-tree">
+  <span class="dir">music-interval-training/</span><br>
+  &nbsp;&nbsp;<span class="file">package.json</span> <span class="annotation">-- lists dependencies and scripts (npm run dev, etc.)</span><br>
+  &nbsp;&nbsp;<span class="file">svelte.config.js</span> <span class="annotation">-- tells SvelteKit how to build (adapter, settings)</span><br>
+  &nbsp;&nbsp;<span class="file">vite.config.ts</span> <span class="annotation">-- config for Vite, the build tool that runs everything</span><br>
+  &nbsp;&nbsp;<span class="dir">src/</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">app.html</span> <span class="annotation">-- the HTML shell, wraps everything</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<span class="file">app.css</span> <span class="annotation">-- global styles (just imports Tailwind)</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">routes/</span> <span class="annotation">-- <strong>pages!</strong> file structure = URL structure</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">+layout.svelte</span> <span class="annotation">-- wraps every page (sets &lt;title&gt;, loads CSS)</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">+page.svelte</span> <span class="annotation">-- the main (and only) page of your app</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">lib/</span> <span class="annotation">-- shared code, imported as $lib/...</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">components/</span> <span class="annotation">-- reusable UI pieces</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">Fretboard.svelte</span> <span class="annotation">-- the guitar fretboard at the bottom</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="highlight">InfoPanel.svelte</span> <span class="annotation">-- the reference table sidebar</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">music/</span> <span class="annotation">-- music theory logic (intervals, chords, notes)</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">audio/</span> <span class="annotation">-- sound playback (Web Audio, ABC notation)</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">exercise/</span> <span class="annotation">-- question generation logic</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">stats/</span> <span class="annotation">-- score tracking (localStorage)</span><br>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="dir">i18n/</span> <span class="annotation">-- translations (English/Czech)</span><br>
+</div>
+
+<div class="callout callout-try">
+  <div class="callout-label">Try This</div>
+  Open your project in a file explorer or your editor. Match each folder to the description above. The most important file for now is <code>src/routes/+page.svelte</code> -- that's where almost all of your app's UI lives.
+</div>
+
+<!-- ============================== -->
+<h2><span class="section-num">4.</span> The Three Sections of a .svelte File</h2>
+
+<p>
+  Every <code>.svelte</code> file can have up to three sections. Think of it like a sandwich:
+  <a href="https://svelte.dev/docs" class="cite">[svelte.dev]</a>
+</p>
+
+<pre><code><span class="comment">// 1. SCRIPT -- the brain (JavaScript/TypeScript logic)</span>
+<span class="tag">&lt;script</span> <span class="attr">lang</span>=<span class="string">"ts"</span><span class="tag">&gt;</span>
+  <span class="keyword">let</span> count = <span class="string">0</span>;
+<span class="tag">&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- 2. MARKUP -- the face (HTML that the user sees) --&gt;</span>
+<span class="tag">&lt;button</span> <span class="attr">onclick</span>=<span class="string">{() => count++}</span><span class="tag">&gt;</span>
+  Clicked {count} times
+<span class="tag">&lt;/button&gt;</span>
+
+<span class="comment">&lt;!-- 3. STYLE -- the clothes (CSS, scoped to this component) --&gt;</span>
+<span class="tag">&lt;style&gt;</span>
+  button { color: blue; }
+<span class="tag">&lt;/style&gt;</span>
+</code></pre>
+
+<p>All three are optional. Let's look at your actual files:</p>
+
+<h3>Your +layout.svelte (the simplest possible example)</h3>
+
+<pre><code><span class="comment">// SCRIPT section</span>
+<span class="tag">&lt;script</span> <span class="attr">lang</span>=<span class="string">"ts"</span><span class="tag">&gt;</span>
+  <span class="keyword">import</span> <span class="string">'../app.css'</span>;          <span class="comment">// loads Tailwind CSS globally</span>
+  <span class="keyword">let</span> { children } = $props();   <span class="comment">// receives the page content</span>
+<span class="tag">&lt;/script&gt;</span>
+
+<span class="comment">&lt;!-- MARKUP section --&gt;</span>
+<span class="tag">&lt;svelte:head&gt;</span>
+  <span class="tag">&lt;title&gt;</span>Interval Training<span class="tag">&lt;/title&gt;</span>
+<span class="tag">&lt;/svelte:head&gt;</span>
+
+{@render children()}    <span class="comment">&lt;!-- "put the page content here" --&gt;</span>
+</code></pre>
+
+<p>
+  This layout wraps <strong>every page</strong>. It loads CSS, sets the browser tab title, and then renders whatever page you're on via <code>{@render children()}</code>. Since your app only has one page (<code>+page.svelte</code>), the layout wraps just that page.
+</p>
+
+<h3>Your app.css (the shortest file)</h3>
+
+<pre><code><span class="keyword">@import</span> <span class="string">'tailwindcss'</span>;
+</code></pre>
+
+<p>That's the entire file. It just activates Tailwind CSS, which is why all your styling uses classes like <code>bg-gray-950</code>, <code>text-white</code>, <code>flex</code>, etc. directly in the HTML markup.</p>
+
+<!-- ============================== -->
+<h2><span class="section-num">5.</span> How Routing Works</h2>
+
+<p>
+  SvelteKit uses <strong>file-based routing</strong>. The folder structure inside <code>src/routes/</code> directly maps to URLs:
+  <a href="https://svelte.dev/docs/kit/routing" class="cite">[svelte.dev/docs/kit/routing]</a>
+</p>
+
+<div class="diagram">
+  <span class="box" style="border-color: var(--green);">src/routes/+page.svelte</span>
+  <span class="arrow">&rarr;</span>
+  <span class="box">http://localhost:5173/</span>
+  <br><br>
+  <span class="box" style="border-color: var(--green);">src/routes/about/+page.svelte</span>
+  <span class="arrow">&rarr;</span>
+  <span class="box">http://localhost:5173/about</span>
+  <br><br>
+  <span class="box" style="border-color: var(--green);">src/routes/settings/+page.svelte</span>
+  <span class="arrow">&rarr;</span>
+  <span class="box">http://localhost:5173/settings</span>
+</div>
+
+<p>Your app has only one page -- <code>src/routes/+page.svelte</code> -- which maps to the root URL <code>/</code>. If you wanted to add a second page (say, an "about" page), you'd create <code>src/routes/about/+page.svelte</code>.</p>
+
+<p>The <code>+layout.svelte</code> file wraps all pages in its directory. It's like a picture frame -- different pictures (pages) go inside, but the frame stays the same.</p>
+
+<!-- ============================== -->
+<h2><span class="section-num">6.</span> Components: Building Blocks</h2>
+
+<p>
+  A component is a reusable piece of UI. Your app has two custom components:
+</p>
+<ul>
+  <li><code>Fretboard.svelte</code> -- the guitar fretboard at the bottom of the screen</li>
+  <li><code>InfoPanel.svelte</code> -- the reference table that slides in from the right</li>
+</ul>
+
+<p>Components live in <code>src/lib/components/</code> and are used by importing them:</p>
+
+<pre><code><span class="comment">// In +page.svelte, the SCRIPT section:</span>
+<span class="keyword">import</span> Fretboard <span class="keyword">from</span> <span class="string">'$lib/components/Fretboard.svelte'</span>;
+<span class="keyword">import</span> InfoPanel <span class="keyword">from</span> <span class="string">'$lib/components/InfoPanel.svelte'</span>;
+
+<span class="comment">// Then in the MARKUP section, use them like HTML tags:</span>
+<span class="tag">&lt;Fretboard</span> <span class="attr">{highlights}</span> <span class="attr">{mutedStrings}</span> <span class="attr">{activeNoteMidi}</span> <span class="tag">/&gt;</span>
+<span class="tag">&lt;InfoPanel</span> <span class="attr">mode</span>=<span class="string">{exerciseType}</span> <span class="tag">/&gt;</span>
+</code></pre>
+
+<div class="callout callout-ts">
+  <div class="callout-label">TypeScript note</div>
+  You'll notice <code>&lt;script lang="ts"&gt;</code> at the top of your files. This just means "I'm writing TypeScript instead of plain JavaScript." TypeScript adds <strong>type annotations</strong> -- labels that say what kind of data a variable holds. For example, <code>let count: number = 0</code> means "count is a number." If you see a colon followed by a type name, that's TypeScript -- you can mentally skip it for now and focus on the logic.
+</div>
+
+<!-- ============================== -->
+<h2><span class="section-num">7.</span> The $lib Shortcut</h2>
+
+<p>You'll see imports like <code>$lib/components/Fretboard.svelte</code> everywhere. The <code>$lib</code> is a SvelteKit shortcut that always points to <code>src/lib/</code>. It saves you from writing long relative paths like <code>../../lib/components/...</code>.</p>
+
+<p>So when you see:</p>
+<pre><code><span class="keyword">import</span> { recordAnswer } <span class="keyword">from</span> <span class="string">'$lib/stats/store'</span>;
+</code></pre>
+<p>It's loading from the file <code>src/lib/stats/store.ts</code>.</p>
+
+<!-- ============================== -->
+<h2><span class="section-num">8.</span> Where To Look When You Want To Change Something</h2>
+
+<p>Here's a practical cheat sheet for your app:</p>
+
+<table style="width: 100%; border-collapse: collapse; margin: 1rem 0;">
+  <thead>
+    <tr style="border-bottom: 2px solid var(--border); text-align: left;">
+      <th style="padding: 0.5rem; color: var(--accent);">I want to change...</th>
+      <th style="padding: 0.5rem; color: var(--accent);">Look in...</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr style="border-bottom: 1px solid var(--border);">
+      <td style="padding: 0.5rem;">The page layout, buttons, exercise flow</td>
+      <td style="padding: 0.5rem;"><code>src/routes/+page.svelte</code></td>
+    </tr>
+    <tr style="border-bottom: 1px solid var(--border);">
+      <td style="padding: 0.5rem;">The fretboard display</td>
+      <td style="padding: 0.5rem;"><code>src/lib/components/Fretboard.svelte</code></td>
+    </tr>
+    <tr style="border-bottom: 1px solid var(--border);">
+      <td style="padding: 0.5rem;">The reference info panel</td>
+      <td style="padding: 0.5rem;"><code>src/lib/components/InfoPanel.svelte</code></td>
+    </tr>
+    <tr style="border-bottom: 1px solid var(--border);">
+      <td style="padding: 0.5rem;">What intervals/chords exist</td>
+      <td style="padding: 0.5rem;"><code>src/lib/music/intervals.ts</code> or <code>chords.ts</code></td>
+    </tr>
+    <tr style="border-bottom: 1px solid var(--border);">
+      <td style="padding: 0.5rem;">How sounds are played</td>
+      <td style="padding: 0.5rem;"><code>src/lib/audio/engine.ts</code></td>
+    </tr>
+    <tr style="border-bottom: 1px solid var(--border);">
+      <td style="padding: 0.5rem;">How scores are tracked</td>
+      <td style="padding: 0.5rem;"><code>src/lib/stats/store.ts</code></td>
+    </tr>
+    <tr style="border-bottom: 1px solid var(--border);">
+      <td style="padding: 0.5rem;">Translations (English/Czech text)</td>
+      <td style="padding: 0.5rem;"><code>src/lib/i18n/translations.ts</code></td>
+    </tr>
+    <tr style="border-bottom: 1px solid var(--border);">
+      <td style="padding: 0.5rem;">The browser tab title</td>
+      <td style="padding: 0.5rem;"><code>src/routes/+layout.svelte</code></td>
+    </tr>
+    <tr>
+      <td style="padding: 0.5rem;">Global styles / Tailwind config</td>
+      <td style="padding: 0.5rem;"><code>src/app.css</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ============================== -->
+<h2><span class="section-num">9.</span> Quick Check</h2>
+
+<div class="quiz-section">
+  <p class="quiz-question">1. If you wanted to add a new page at the URL <code>/settings</code>, where would you create the file?</p>
+  <button class="quiz-btn" onclick="checkAnswer(this, false, 'q1')">src/lib/settings/+page.svelte</button>
+  <button class="quiz-btn" onclick="checkAnswer(this, true, 'q1')">src/routes/settings/+page.svelte</button>
+  <button class="quiz-btn" onclick="checkAnswer(this, false, 'q1')">src/settings.svelte</button>
+  <div id="q1-correct" class="quiz-feedback correct">Correct! Pages go in <code>src/routes/</code>, and the folder name becomes the URL path.</div>
+  <div id="q1-wrong" class="quiz-feedback wrong">Not quite. Pages always go inside <code>src/routes/</code>. The folder name becomes the URL. So <code>src/routes/settings/+page.svelte</code> maps to <code>/settings</code>.</div>
+</div>
+
+<div class="quiz-section">
+  <p class="quiz-question">2. What does <code>$lib</code> in an import path refer to?</p>
+  <button class="quiz-btn" onclick="checkAnswer(this, false, 'q2')">A special Svelte library installed via npm</button>
+  <button class="quiz-btn" onclick="checkAnswer(this, true, 'q2')">A shortcut to the <code>src/lib/</code> folder in your project</button>
+  <button class="quiz-btn" onclick="checkAnswer(this, false, 'q2')">The browser's local storage</button>
+  <div id="q2-correct" class="quiz-feedback correct">Right! <code>$lib</code> is just a convenient alias for <code>src/lib/</code>.</div>
+  <div id="q2-wrong" class="quiz-feedback wrong"><code>$lib</code> is a SvelteKit alias that points to <code>src/lib/</code> in your project. It keeps import paths short and clean.</div>
+</div>
+
+<div class="quiz-section">
+  <p class="quiz-question">3. What are the three sections of a <code>.svelte</code> file?</p>
+  <button class="quiz-btn" onclick="checkAnswer(this, false, 'q3')">HTML, CSS, JavaScript (in separate files)</button>
+  <button class="quiz-btn" onclick="checkAnswer(this, true, 'q3')">Script, Markup, Style (all in one file)</button>
+  <button class="quiz-btn" onclick="checkAnswer(this, false, 'q3')">Header, Body, Footer</button>
+  <div id="q3-correct" class="quiz-feedback correct">Exactly! A <code>.svelte</code> file combines script (&lt;script&gt;), markup (HTML), and style (&lt;style&gt;) in a single file. All three are optional.</div>
+  <div id="q3-wrong" class="quiz-feedback wrong">A <code>.svelte</code> file has three sections, all in <strong>one file</strong>: <code>&lt;script&gt;</code> (logic), markup (HTML), and <code>&lt;style&gt;</code> (CSS).</div>
+</div>
+
+<div class="quiz-section">
+  <p class="quiz-question">4. What makes Svelte different from React?</p>
+  <button class="quiz-btn" onclick="checkAnswer(this, false, 'q4')">Svelte uses a virtual DOM for faster updates</button>
+  <button class="quiz-btn" onclick="checkAnswer(this, false, 'q4')">Svelte runs entirely on the server</button>
+  <button class="quiz-btn" onclick="checkAnswer(this, true, 'q4')">Svelte compiles components to vanilla JS at build time -- no virtual DOM, no runtime framework</button>
+  <div id="q4-correct" class="quiz-feedback correct">Yes! Svelte is a compiler. It transforms your <code>.svelte</code> files into optimized JavaScript at build time, so no framework runtime is shipped to the browser.</div>
+  <div id="q4-wrong" class="quiz-feedback wrong">Svelte's key difference is that it's a <strong>compiler</strong>. Your code is transformed into plain JavaScript at build time. There's no virtual DOM and no runtime library sent to the browser.</div>
+</div>
+
+<!-- ============================== -->
+<h2><span class="section-num">10.</span> What's Next</h2>
+
+<p>Now you know the <strong>shape</strong> of your app -- where files live and what they do. The next lesson will dive into the <strong>markup section</strong> of <code>.svelte</code> files: how <code>{#if}</code>, <code>{#each}</code>, <code>{curly braces}</code>, and event handlers like <code>onclick</code> work in your actual app code.</p>
+
+<div class="callout callout-try">
+  <div class="callout-label">Try This Before Next Session</div>
+  <ol>
+    <li>Run <code>npm run dev</code> in your music-interval-training folder and open the app in a browser</li>
+    <li>Open <code>src/routes/+page.svelte</code> in your editor</li>
+    <li>Find the line that says <code>Interval Training</code> (hint: it's not in +page.svelte) and change it to something else. Save and watch the browser tab title update.</li>
+    <li>Look at the "cheat sheet" table above and try to match 2-3 things you see in the browser to the files listed</li>
+  </ol>
+</div>
+
+<script>
+function checkAnswer(btn, correct, questionId) {
+  const section = btn.closest('.quiz-section');
+  const buttons = section.querySelectorAll('.quiz-btn');
+  const wasAnswered = section.querySelector('.quiz-btn.correct, .quiz-btn.wrong');
+  if (wasAnswered) return;
+
+  buttons.forEach(b => b.style.pointerEvents = 'none');
+
+  if (correct) {
+    btn.classList.add('correct');
+    section.querySelector(`#${questionId}-correct`).classList.add('show');
+  } else {
+    btn.classList.add('wrong');
+    section.querySelector(`#${questionId}-wrong`).classList.add('show');
+    buttons.forEach(b => {
+      if (b !== btn && b.getAttribute('onclick')?.includes('true')) {
+        b.classList.add('correct');
+      }
+    });
+  }
+}
+</script>
+
+</body>
+</html>

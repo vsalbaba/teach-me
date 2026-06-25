@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1: What Is a PRD?</title>
+<style>
+  :root {
+    --bg: #1a1b26;
+    --surface: #24283b;
+    --surface2: #2f3347;
+    --text: #c0caf5;
+    --text-muted: #565f89;
+    --accent: #7aa2f7;
+    --accent2: #bb9af7;
+    --green: #9ece6a;
+    --orange: #e0af68;
+    --red: #f7768e;
+    --border: #3b4261;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+  h1 {
+    font-size: 2rem;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+  }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 2.5rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 1.5rem;
+  }
+  h2 {
+    font-size: 1.4rem;
+    color: var(--accent2);
+    margin: 2.5rem 0 1rem;
+    letter-spacing: -0.01em;
+  }
+  h3 {
+    font-size: 1.1rem;
+    color: var(--orange);
+    margin: 1.5rem 0 0.75rem;
+  }
+  p { margin-bottom: 1rem; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; }
+  a:hover { border-bottom-color: var(--accent); }
+  code {
+    background: var(--surface2);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+  pre {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    overflow-x: auto;
+    margin: 1rem 0 1.5rem;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  }
+  pre code { background: none; padding: 0; }
+  .callout {
+    border-left: 4px solid var(--accent);
+    background: var(--surface);
+    padding: 1rem 1.25rem;
+    border-radius: 0 8px 8px 0;
+    margin: 1.5rem 0;
+  }
+  .callout.try {
+    border-left-color: var(--green);
+  }
+  .callout.try::before {
+    content: "Try this";
+    display: block;
+    font-weight: 700;
+    color: var(--green);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+  .callout.warn {
+    border-left-color: var(--orange);
+  }
+  .callout.warn::before {
+    content: "Watch out";
+    display: block;
+    font-weight: 700;
+    color: var(--orange);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+  .callout.key {
+    border-left-color: var(--accent2);
+  }
+  .callout.key::before {
+    content: "Key insight";
+    display: block;
+    font-weight: 700;
+    color: var(--accent2);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .compare > div {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+  }
+  .compare .bad { border-top: 3px solid var(--red); }
+  .compare .good { border-top: 3px solid var(--green); }
+  .compare .label {
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+  }
+  .compare .bad .label { color: var(--red); }
+  .compare .good .label { color: var(--green); }
+  ul, ol { margin: 0.5rem 0 1rem 1.5rem; }
+  li { margin-bottom: 0.4rem; }
+  .section-num {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 400;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0 1.5rem;
+    font-size: 0.9rem;
+  }
+  th, td {
+    text-align: left;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--border);
+  }
+  th {
+    background: var(--surface2);
+    color: var(--accent);
+    font-weight: 600;
+  }
+  td { background: var(--surface); }
+  .cite {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    vertical-align: super;
+  }
+  .sources {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+  .sources h3 { color: var(--text-muted); }
+  .sources ol { margin-left: 1.25rem; }
+  .sources li { margin-bottom: 0.3rem; }
+
+  /* Quiz styles */
+  .quiz {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+  .quiz h3 {
+    color: var(--green);
+    margin-top: 0;
+  }
+  .quiz-question {
+    margin-bottom: 1.5rem;
+  }
+  .quiz-question p {
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+  }
+  .quiz-option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 0.6rem 1rem;
+    margin: 0.3rem 0;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.15s;
+  }
+  .quiz-option:hover { border-color: var(--accent); }
+  .quiz-option.correct {
+    background: #1a3a1a;
+    border-color: var(--green);
+    color: var(--green);
+  }
+  .quiz-option.wrong {
+    background: #3a1a1a;
+    border-color: var(--red);
+    color: var(--red);
+  }
+  .quiz-feedback {
+    display: none;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+  }
+  @media (max-width: 600px) {
+    .compare { grid-template-columns: 1fr; }
+    body { padding: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Lesson 1: What Is a PRD?</h1>
+<p class="subtitle">Understanding Product Requirements Documents -- what they are, who uses them, and why they exist</p>
+
+<!-- ===== SECTION 1 ===== -->
+<h2><span class="section-num">01 /</span> The One-Sentence Definition</h2>
+
+<p>A <strong>PRD (Product Requirements Document)</strong> defines <em>what</em> a product or feature should do from the user's perspective -- its purpose, behavior, constraints, and success criteria.<a href="#src-1" class="cite">[1]</a></p>
+
+<div class="callout key">
+A PRD answers <strong>"what and why"</strong> -- never "how." It describes the problem to solve and the behavior the solution must exhibit, but leaves implementation decisions to the engineering team.<a href="#src-2" class="cite">[2]</a>
+</div>
+
+<p>Think of it as a contract between three groups:</p>
+<ul>
+  <li><strong>Product</strong> -- defines the problem and success metrics</li>
+  <li><strong>Engineering</strong> -- builds the solution within the stated constraints</li>
+  <li><strong>QA / QE</strong> -- verifies the solution meets the acceptance criteria</li>
+</ul>
+
+<p>As a developer <em>and</em> QE engineer, you sit on the receiving end of this contract. As a hobby PM, you'll also write it. That dual perspective is a strength -- you'll write PRDs that are actually testable and implementable.</p>
+
+<!-- ===== SECTION 2 ===== -->
+<h2><span class="section-num">02 /</span> Who Uses PRDs and How</h2>
+
+<table>
+  <thead>
+    <tr><th>Role</th><th>Reads the PRD to...</th><th>Writes/contributes...</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Product Manager</td><td>Align stakeholders on scope</td><td>Owns the document: problem, goals, scope, metrics</td></tr>
+    <tr><td>Designer</td><td>Understand user needs and constraints</td><td>UX flows, wireframes, interaction specs</td></tr>
+    <tr><td>Developer</td><td>Know what to build and what's out of scope</td><td>Feasibility input, NFRs, technical constraints</td></tr>
+    <tr><td>QA / QE</td><td>Derive test cases from acceptance criteria</td><td>Edge cases, testability feedback</td></tr>
+    <tr><td>Stakeholders</td><td>Confirm business alignment</td><td>Business context, priority input</td></tr>
+  </tbody>
+</table>
+
+<div class="callout key">
+The best PRD is the one people actually read and update. Pick the format your engineering partners already live in.<a href="#src-3" class="cite">[3]</a> For you, that's Markdown -- and that's a fine choice.
+</div>
+
+<!-- ===== SECTION 3 ===== -->
+<h2><span class="section-num">03 /</span> PRD vs. Other Documents</h2>
+
+<p>PRDs often get confused with adjacent artifacts. Here's how they differ:</p>
+
+<table>
+  <thead>
+    <tr><th>Document</th><th>Focus</th><th>Owned by</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>PRD</strong></td><td>What to build and why (user perspective)</td><td>Product</td></tr>
+    <tr><td>Design doc / RFC</td><td>How to build it (technical approach)</td><td>Engineering</td></tr>
+    <tr><td>MRD (Market Req. Doc)</td><td>Market opportunity and business case</td><td>Product Marketing</td></tr>
+    <tr><td>User stories</td><td>Individual behaviors from user perspective</td><td>Product + Eng</td></tr>
+    <tr><td>Test plan</td><td>How to verify the build is correct</td><td>QA / QE</td></tr>
+  </tbody>
+</table>
+
+<p>A PRD is upstream of user stories and test plans. It's the source they're derived from.<a href="#src-4" class="cite">[4]</a></p>
+
+<!-- ===== SECTION 4 ===== -->
+<h2><span class="section-num">04 /</span> Anatomy of a PRD</h2>
+
+<p>A well-structured PRD has these sections.<a href="#src-1" class="cite">[1]</a> Not all are always needed -- scale to the size of the feature.</p>
+
+<ol>
+  <li><strong>Overview & Context</strong> -- The problem, why now, links to research</li>
+  <li><strong>Goals & Success Metrics</strong> -- Primary/secondary metrics with targets, plus guardrails</li>
+  <li><strong>Users & Use Cases</strong> -- Who benefits and what they do (user stories)</li>
+  <li><strong>Scope</strong> -- In-scope and out-of-scope, explicitly</li>
+  <li><strong>Functional Requirements</strong> -- Behaviors the system must support</li>
+  <li><strong>Acceptance Criteria</strong> -- Testable Given/When/Then scenarios</li>
+  <li><strong>Non-Functional Requirements</strong> -- Performance, security, reliability, accessibility</li>
+  <li><strong>Design & UX</strong> -- Links to wireframes, prototypes</li>
+  <li><strong>Analytics & Telemetry</strong> -- What to measure, alert thresholds</li>
+  <li><strong>Dependencies & Constraints</strong> -- APIs, legal, platform limits</li>
+  <li><strong>Risks & Assumptions</strong> -- Value, usability, feasibility, business risks</li>
+  <li><strong>Rollout & Ops</strong> -- Phasing, feature flags, migration</li>
+  <li><strong>Open Questions</strong> -- With owners and due dates</li>
+  <li><strong>Changelog</strong> -- Dated entries for material updates</li>
+</ol>
+
+<div class="callout warn">
+  Don't treat this as a form to fill in. A small feature might need sections 1-6 and nothing else. A large initiative might need all 14. The sections exist to prevent you from <em>forgetting</em> something important, not to create busywork.<a href="#src-1" class="cite">[1]</a>
+</div>
+
+<!-- ===== SECTION 5 ===== -->
+<h2><span class="section-num">05 /</span> What Makes a Requirement "Good"</h2>
+
+<p>The single most important skill in PRD writing is making requirements <strong>testable</strong>. If a QE engineer can't write a test from your requirement, it's not a requirement -- it's a wish.<a href="#src-1" class="cite">[1]</a></p>
+
+<div class="compare">
+  <div class="bad">
+    <div class="label">Vague</div>
+    <p>"The system should be fast"</p>
+    <p>"The UI should be user-friendly"</p>
+    <p>"Handle errors gracefully"</p>
+  </div>
+  <div class="good">
+    <div class="label">Testable</div>
+    <p>"p95 search latency &lt; 200ms at 2x current traffic"</p>
+    <p>"WCAG 2.2 AA for all new UI components"</p>
+    <p>"On network timeout, show retry button; auto-retry up to 3 times with exponential backoff"</p>
+  </div>
+</div>
+
+<p>The gold standard for acceptance criteria is <strong>Given/When/Then</strong> (Gherkin) format:</p>
+
+<pre><code><strong>Scenario:</strong> Reset password via email
+  <strong>Given</strong> an existing user with a verified email
+  <strong>When</strong> they request a password reset
+  <strong>Then</strong> they receive a reset link that expires in 15 minutes
+
+<strong>Scenario:</strong> Reset password with unverified email
+  <strong>Given</strong> a user whose email is not verified
+  <strong>When</strong> they request a password reset
+  <strong>Then</strong> they see an error: "Please verify your email first"
+  <strong>And</strong> no reset email is sent</code></pre>
+
+<div class="callout key">
+Cover both the happy path <em>and</em> the edge cases. As a QE engineer, you already think this way. That's your superpower when writing PRDs -- you naturally ask "what happens when this goes wrong?"
+</div>
+
+<!-- ===== SECTION 6 ===== -->
+<h2><span class="section-num">06 /</span> The Five Deadly Sins of PRDs</h2>
+
+<ol>
+  <li><strong>Jumping to solutions.</strong> Starting with "add a modal dialog with a blue button" instead of "users need to reset their password."<a href="#src-1" class="cite">[1]</a></li>
+  <li><strong>Vague acceptance criteria.</strong> "It should be fast" is not a requirement.<a href="#src-1" class="cite">[1]</a></li>
+  <li><strong>Ignoring NFRs.</strong> Skipping security or performance requirements means they get decided ad-hoc during implementation -- or not at all.<a href="#src-2" class="cite">[2]</a></li>
+  <li><strong>Scope creep via omission.</strong> If you don't explicitly list what's <em>out</em> of scope, everything is in scope.<a href="#src-1" class="cite">[1]</a></li>
+  <li><strong>Write-once, never update.</strong> A PRD that doesn't evolve with the project becomes misleading. Add a changelog.<a href="#src-1" class="cite">[1]</a></li>
+</ol>
+
+<!-- ===== SECTION 7 ===== -->
+<h2><span class="section-num">07 /</span> From PRD to Issues: Vertical Slicing</h2>
+
+<p>Once a PRD is written, it needs to become <em>work</em>. The best decomposition method is <strong>vertical slicing</strong> -- breaking the PRD into thin, end-to-end features rather than layer-by-layer tasks.<a href="#src-5" class="cite">[5]</a></p>
+
+<div class="compare">
+  <div class="bad">
+    <div class="label">Horizontal (avoid)</div>
+    <p>Issue 1: Create database schema</p>
+    <p>Issue 2: Build API endpoints</p>
+    <p>Issue 3: Build frontend UI</p>
+    <p>Issue 4: Write tests</p>
+    <p><em>Nothing is demoable until all 4 are done.</em></p>
+  </div>
+  <div class="good">
+    <div class="label">Vertical (prefer)</div>
+    <p>Issue 1: User can request password reset (schema + API + UI + tests)</p>
+    <p>Issue 2: User can set new password via link (schema + API + UI + tests)</p>
+    <p>Issue 3: Expired links show error (logic + UI + tests)</p>
+    <p><em>Each issue is independently demoable.</em></p>
+  </div>
+</div>
+
+<p>The five-step decomposition process:<a href="#src-5" class="cite">[5]</a></p>
+<ol>
+  <li><strong>Gather context</strong> -- read the PRD, understand the domain</li>
+  <li><strong>Explore the codebase</strong> -- find what exists, identify prefactoring needs</li>
+  <li><strong>Draft vertical slices</strong> -- each slice is a complete path through all layers</li>
+  <li><strong>Validate</strong> -- check granularity, dependencies, and coverage against the PRD</li>
+  <li><strong>Publish issues</strong> -- in dependency order, blockers first</li>
+</ol>
+
+<p>Each issue should contain:</p>
+
+<table>
+  <thead>
+    <tr><th>Section</th><th>Purpose</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Parent</strong></td><td>Links back to the PRD or epic</td></tr>
+    <tr><td><strong>What to build</strong></td><td>End-to-end behavior description</td></tr>
+    <tr><td><strong>Acceptance criteria</strong></td><td>Checklist of verifiable outcomes</td></tr>
+    <tr><td><strong>Blocked by</strong></td><td>Issue IDs of dependencies, or "None"</td></tr>
+  </tbody>
+</table>
+
+<!-- ===== SECTION 8 ===== -->
+<h2><span class="section-num">08 /</span> PRD Formats: Pick Your Weight Class</h2>
+
+<p>Not every feature needs 14 sections. Match the PRD format to the risk and size:<a href="#src-1" class="cite">[1]</a></p>
+
+<table>
+  <thead>
+    <tr><th>Format</th><th>When to use</th><th>Sections</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Lean one-pager</strong></td><td>Minor enhancements, low risk</td><td>Problem, goal metric, scope, 3-5 acceptance criteria, at-risk NFRs</td></tr>
+    <tr><td><strong>Standard PRD</strong></td><td>Most features</td><td>Sections 1-7, plus whatever else applies</td></tr>
+    <tr><td><strong>Full PRD</strong></td><td>Large initiatives, compliance-sensitive</td><td>All 14 sections</td></tr>
+    <tr><td><strong>Amazon PR/FAQ</strong></td><td>When biggest risk is "will anyone care?"</td><td>Press release + FAQ, precursor to PRD</td></tr>
+  </tbody>
+</table>
+
+<!-- ===== QUIZ ===== -->
+<div class="quiz">
+  <h3>Check Your Understanding</h3>
+
+  <div class="quiz-question" id="q1">
+    <p>1. A PRD should primarily describe:</p>
+    <button class="quiz-option" onclick="answer(this, false, 'q1', 'A PRD focuses on WHAT to build (user perspective), not HOW to build it. Technical approach belongs in a design doc or RFC.')">How the engineering team should implement the feature</button>
+    <button class="quiz-option" onclick="answer(this, true, 'q1', 'Correct! A PRD defines what the product should do from the user perspective -- the problem, behavior, and success criteria.')">What the product should do from the user&apos;s perspective</button>
+    <button class="quiz-option" onclick="answer(this, false, 'q1', 'Market opportunity belongs in an MRD (Market Requirements Document). A PRD is downstream of that.')">The market opportunity and business case</button>
+    <div class="quiz-feedback" id="q1-feedback"></div>
+  </div>
+
+  <div class="quiz-question" id="q2">
+    <p>2. Which of these is a well-written acceptance criterion?</p>
+    <button class="quiz-option" onclick="answer(this, false, 'q2', '&quot;User-friendly&quot; is subjective -- different people will interpret it differently. A QE engineer cannot write a test for this.')">The search feature should be user-friendly</button>
+    <button class="quiz-option" onclick="answer(this, false, 'q2', '&quot;Quickly&quot; is vague. How fast is quickly? 100ms? 5 seconds? Without a number, this is untestable.')">The system should return results quickly</button>
+    <button class="quiz-option" onclick="answer(this, true, 'q2', 'Correct! This is specific, measurable, and testable. A QE engineer can set up a load test and verify the exact threshold.')">Given 2x current traffic, when a user searches, then p95 latency is under 200ms</button>
+    <div class="quiz-feedback" id="q2-feedback"></div>
+  </div>
+
+  <div class="quiz-question" id="q3">
+    <p>3. Vertical slicing means:</p>
+    <button class="quiz-option" onclick="answer(this, false, 'q3', 'That is horizontal slicing -- dividing by technical layer. Nothing is demoable until ALL layers are done.')">Splitting work by layer: database first, then API, then UI</button>
+    <button class="quiz-option" onclick="answer(this, true, 'q3', 'Correct! Each vertical slice cuts through every layer and delivers a working, demoable increment.')">Splitting work into thin end-to-end features, each independently demoable</button>
+    <button class="quiz-option" onclick="answer(this, false, 'q3', 'Splitting by team creates integration risk. Vertical slicing is about each unit of work being complete across all layers, regardless of who builds it.')">Splitting work by team: backend team, frontend team, QA team</button>
+    <div class="quiz-feedback" id="q3-feedback"></div>
+  </div>
+</div>
+
+<script>
+function answer(btn, correct, qId, explanation) {
+  const q = document.getElementById(qId);
+  if (q.dataset.answered) return;
+  q.dataset.answered = 'true';
+
+  const buttons = q.querySelectorAll('.quiz-option');
+  buttons.forEach(b => {
+    b.style.cursor = 'default';
+    if (b === btn) {
+      b.classList.add(correct ? 'correct' : 'wrong');
+    }
+    if (!correct) {
+      // highlight the correct one
+      const idx = Array.from(buttons).indexOf(b);
+      // find correct by checking onclick
+    }
+  });
+
+  const fb = document.getElementById(qId + '-feedback');
+  fb.style.display = 'block';
+  fb.style.background = correct ? '#1a3a1a' : '#3a1a1a';
+  fb.style.color = correct ? '#9ece6a' : '#f7768e';
+  fb.textContent = explanation;
+}
+</script>
+
+<!-- ===== SOURCES ===== -->
+<div class="sources">
+  <h3>Sources</h3>
+  <ol>
+    <li id="src-1"><a href="https://www.uladshauchenka.com/p/how-to-write-a-good-product-requirements">Ulad Shauchenka -- "How to Write a Good PRD: A Tactical, Modern Guide"</a></li>
+    <li id="src-2"><a href="https://www.perforce.com/blog/alm/how-write-product-requirements-document-prd">Perforce -- "How to Write a PRD: Your Complete Guide"</a></li>
+    <li id="src-3"><a href="https://www.parallelhq.com/blog/how-to-write-product-requirements">Parallel -- "How to Write Product Requirements: 2026 Guide & PRD Template"</a></li>
+    <li id="src-4"><a href="https://carlinyuen.medium.com/writing-prds-and-product-requirements-2effdb9c6def">Carlin Yuen -- "Writing PRDs and Product Requirements" (Medium)</a></li>
+    <li id="src-5"><a href="https://deepwiki.com/mattpocock/skills/3.2-breaking-prds-into-vertical-slices">DeepWiki -- "Breaking PRDs into Vertical Slices" (Matt Pocock's Skills)</a></li>
+  </ol>
+</div>
+
+</body>
+</html>
